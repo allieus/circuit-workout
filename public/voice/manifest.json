@@ -69,6 +69,116 @@
     "text": "7라운드 완료. 잠시 쉬세요.",
     "hash": "0399f0fe"
   },
+  "roundrest_8": {
+    "file": "roundrest_8.mp3",
+    "text": "8라운드 완료. 잠시 쉬세요.",
+    "hash": "70d5600f"
+  },
+  "roundrest_9": {
+    "file": "roundrest_9.mp3",
+    "text": "9라운드 완료. 잠시 쉬세요.",
+    "hash": "5af70508"
+  },
+  "roundrest_10": {
+    "file": "roundrest_10.mp3",
+    "text": "10라운드 완료. 잠시 쉬세요.",
+    "hash": "aac3d3ee"
+  },
+  "roundrest_11": {
+    "file": "roundrest_11.mp3",
+    "text": "11라운드 완료. 잠시 쉬세요.",
+    "hash": "7d3ec0bd"
+  },
+  "roundrest_12": {
+    "file": "roundrest_12.mp3",
+    "text": "12라운드 완료. 잠시 쉬세요.",
+    "hash": "1be5e223"
+  },
+  "roundrest_13": {
+    "file": "roundrest_13.mp3",
+    "text": "13라운드 완료. 잠시 쉬세요.",
+    "hash": "0a90de91"
+  },
+  "roundrest_14": {
+    "file": "roundrest_14.mp3",
+    "text": "14라운드 완료. 잠시 쉬세요.",
+    "hash": "6fca9262"
+  },
+  "roundrest_15": {
+    "file": "roundrest_15.mp3",
+    "text": "15라운드 완료. 잠시 쉬세요.",
+    "hash": "a16869b3"
+  },
+  "roundrest_16": {
+    "file": "roundrest_16.mp3",
+    "text": "16라운드 완료. 잠시 쉬세요.",
+    "hash": "8b52f6e6"
+  },
+  "roundrest_17": {
+    "file": "roundrest_17.mp3",
+    "text": "17라운드 완료. 잠시 쉬세요.",
+    "hash": "28402154"
+  },
+  "roundrest_18": {
+    "file": "roundrest_18.mp3",
+    "text": "18라운드 완료. 잠시 쉬세요.",
+    "hash": "c7d2aa50"
+  },
+  "roundrest_19": {
+    "file": "roundrest_19.mp3",
+    "text": "19라운드 완료. 잠시 쉬세요.",
+    "hash": "4d26504e"
+  },
+  "roundrest_20": {
+    "file": "roundrest_20.mp3",
+    "text": "20라운드 완료. 잠시 쉬세요.",
+    "hash": "8d1a15c8"
+  },
+  "roundrest_21": {
+    "file": "roundrest_21.mp3",
+    "text": "21라운드 완료. 잠시 쉬세요.",
+    "hash": "de17b227"
+  },
+  "roundrest_22": {
+    "file": "roundrest_22.mp3",
+    "text": "22라운드 완료. 잠시 쉬세요.",
+    "hash": "40d2031d"
+  },
+  "roundrest_23": {
+    "file": "roundrest_23.mp3",
+    "text": "23라운드 완료. 잠시 쉬세요.",
+    "hash": "bdf47be2"
+  },
+  "roundrest_24": {
+    "file": "roundrest_24.mp3",
+    "text": "24라운드 완료. 잠시 쉬세요.",
+    "hash": "9f99e478"
+  },
+  "roundrest_25": {
+    "file": "roundrest_25.mp3",
+    "text": "25라운드 완료. 잠시 쉬세요.",
+    "hash": "afda9008"
+  },
+  "roundrest_26": {
+    "file": "roundrest_26.mp3",
+    "text": "26라운드 완료. 잠시 쉬세요.",
+    "hash": "d74602aa"
+  },
+  "roundrest_27": {
+    "file": "roundrest_27.mp3",
+    "text": "27라운드 완료. 잠시 쉬세요.",
+    "hash": "7360d3bd"
+  },
+  "roundrest_28": {
+    "file": "roundrest_28.mp3",
+    "text": "28라운드 완료. 잠시 쉬세요.",
+    "hash": "c50c7766"
+  },
+  "roundrest_29": {
+    "file": "roundrest_29.mp3",
+    "text": "29라운드 완료. 잠시 쉬세요.",
+    "hash": "b600e03a"
+  },
   "roundstart_2": {
     "file": "roundstart_2.mp3",
     "text": "2라운드 시작!",
@@ -103,6 +213,116 @@
     "file": "roundstart_8.mp3",
     "text": "8라운드 시작!",
     "hash": "2437e35d"
+  },
+  "roundstart_9": {
+    "file": "roundstart_9.mp3",
+    "text": "9라운드 시작!",
+    "hash": "b1d3907e"
+  },
+  "roundstart_10": {
+    "file": "roundstart_10.mp3",
+    "text": "10라운드 시작!",
+    "hash": "08bf16f2"
+  },
+  "roundstart_11": {
+    "file": "roundstart_11.mp3",
+    "text": "11라운드 시작!",
+    "hash": "582bbf86"
+  },
+  "roundstart_12": {
+    "file": "roundstart_12.mp3",
+    "text": "12라운드 시작!",
+    "hash": "3adf65e6"
+  },
+  "roundstart_13": {
+    "file": "roundstart_13.mp3",
+    "text": "13라운드 시작!",
+    "hash": "1ba007e6"
+  },
+  "roundstart_14": {
+    "file": "roundstart_14.mp3",
+    "text": "14라운드 시작!",
+    "hash": "4aa3b69b"
+  },
+  "roundstart_15": {
+    "file": "roundstart_15.mp3",
+    "text": "15라운드 시작!",
+    "hash": "5ac55ff3"
+  },
+  "roundstart_16": {
+    "file": "roundstart_16.mp3",
+    "text": "16라운드 시작!",
+    "hash": "e1308104"
+  },
+  "roundstart_17": {
+    "file": "roundstart_17.mp3",
+    "text": "17라운드 시작!",
+    "hash": "caa52405"
+  },
+  "roundstart_18": {
+    "file": "roundstart_18.mp3",
+    "text": "18라운드 시작!",
+    "hash": "943ebd28"
+  },
+  "roundstart_19": {
+    "file": "roundstart_19.mp3",
+    "text": "19라운드 시작!",
+    "hash": "503a8c06"
+  },
+  "roundstart_20": {
+    "file": "roundstart_20.mp3",
+    "text": "20라운드 시작!",
+    "hash": "af6a25d5"
+  },
+  "roundstart_21": {
+    "file": "roundstart_21.mp3",
+    "text": "21라운드 시작!",
+    "hash": "81d81ac3"
+  },
+  "roundstart_22": {
+    "file": "roundstart_22.mp3",
+    "text": "22라운드 시작!",
+    "hash": "13323dcd"
+  },
+  "roundstart_23": {
+    "file": "roundstart_23.mp3",
+    "text": "23라운드 시작!",
+    "hash": "12dc378f"
+  },
+  "roundstart_24": {
+    "file": "roundstart_24.mp3",
+    "text": "24라운드 시작!",
+    "hash": "a4a52416"
+  },
+  "roundstart_25": {
+    "file": "roundstart_25.mp3",
+    "text": "25라운드 시작!",
+    "hash": "1964a5b1"
+  },
+  "roundstart_26": {
+    "file": "roundstart_26.mp3",
+    "text": "26라운드 시작!",
+    "hash": "b5c23c12"
+  },
+  "roundstart_27": {
+    "file": "roundstart_27.mp3",
+    "text": "27라운드 시작!",
+    "hash": "fe030875"
+  },
+  "roundstart_28": {
+    "file": "roundstart_28.mp3",
+    "text": "28라운드 시작!",
+    "hash": "c92b945d"
+  },
+  "roundstart_29": {
+    "file": "roundstart_29.mp3",
+    "text": "29라운드 시작!",
+    "hash": "2949b704"
+  },
+  "roundstart_30": {
+    "file": "roundstart_30.mp3",
+    "text": "30라운드 시작!",
+    "hash": "f2f5c028"
   },
   "ex_k1": {
     "file": "ex_k1.mp3",

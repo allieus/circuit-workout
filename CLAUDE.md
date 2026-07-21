@@ -60,7 +60,8 @@ docs/
   - 구현: 1초 interval이 `secondsLeft`만 감소 → `secondsLeft` 변화를 감시하는 useEffect가 0이면 `advance()` 호출. **스킵 버튼도 `setSecondsLeft(0)`으로 같은 경로를 탄다** — 전환 로직은 advance() 한 곳에만 둘 것.
 - **음성 가이드** (`audio.js` + `public/voice/`): 발화는 전부 템플릿이라 조합이 유한 — 고정 문구·라운드 숫자·동작(이름+memo)을 ElevenLabs(Anna Kim, eleven_multilingual_v2)로 **사전 생성**해 정적 mp3로 배포. 런타임 API 호출 0회, 오프라인 동작, 키 노출 없음. `speakGuide(keys, fallbackText, enabled)`가 클립을 AudioContext로 이어붙여 재생하고, 클립이 없는 발화(**사용자 추가 동작** 등)는 Web Speech(ko-KR)로 폴백. 타이머 시작 시 그 세션의 클립을 프리페치. 모바일 브라우저는 사용자 제스처 이후에만 소리 허용 — "시작" 버튼 탭이 AudioContext를 unlock. **기본 동작의 name/memo를 바꾸면 `npm run voice`로 클립 재생성 필수**(텍스트 해시 비교로 바뀐 것만 재생성).
 - **동작 교체(reroll)** (`App.jsx`): 같은 패턴 풀에서 현재 동작 제외 후 랜덤. 타이머 중에도 가능(운동 중→현재 동작, 휴식 중→다음 동작).
-- **운동 모드** (`App.jsx` pickRandom): `settings.mode ∈ all | kb | body` — 동작의 `equip` 태그로 풀을 필터. 모드에 맞는 동작이 패턴에 없으면 모드 무시하고 패턴 전체에서 뽑는 폴백. 모드 변경 시 뽑아둔 서킷이 있으면 즉시 다시 뽑는다. equip 없는 동작(구버전 사용자 추가분)은 "전체"에서만 등장.
+- **운동 모드** (`App.jsx` pickRandom): `settings.mode ∈ all | kb | body` — 동작의 `equip` 태그로 풀을 필터. 모드에 맞는 동작이 패턴에 없으면 모드 무시하고 패턴 전체에서 뽑는 폴백. 모드 변경 시 뽑아둔 서킷이 있으면 즉시 다시 뽑는다(프리셋 중엔 유지). equip 없는 동작(구버전 사용자 추가분)은 "전체"에서만 등장.
+- **프로그램 프리셋** (`defaults.js` PRESETS + `App.jsx` applyPreset): 케틀벨-7가지.md의 프로그램(10초/50초·무빙 타겟·딥 식스)을 고정 서킷 + 권장 설정으로 적용. 별도 타이머 로직 없음 — 기존 상태 머신 그대로(10초/50초는 1동작 서킷이라 rest 없이 work→roundRest 반복). 적용 후 설정 조정 자유. "다시 뽑기"(랜덤 생성)로 해제되고, 프리셋 중에는 홈의 개별 ↻ 숨김. 라운드 상한 30 — 라운드 음성 클립도 30까지 사전 생성돼 있음. 서고에서 지운 기본 동작도 프리셋에선 DEFAULT_EXERCISES 폴백으로 동작.
 - **자세 삽화** (`public/art/` + `ExerciseArt.jsx`): codex imagegen으로 사전 생성한 픽토그램. 스타일: 정사각형·주철색(#1E2126) 단색 배경·초크 화이트(#F2EFE9) 굵은 라인·전신 실루엣·디테일/텍스트 없음. 타이머(준비/운동/휴식)와 서고 목록에 표시. 사용자 추가 동작(id가 "u"로 시작)은 삽화 없음 — artUrl이 null 반환.
 - **참고 영상**: 동작별 유튜브 검색 링크(ytUrl — "동작이름 자세" 검색). 홈 카드 ▶ 버튼, 서고 "▶ 영상" 링크.
 - **저장** (`storage.js`): 단일 키 `circuit-app-v1`에 `{exercises, settings}` JSON 통합 저장. 키를 쪼개지 말 것.

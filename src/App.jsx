@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { PATTERNS, DEFAULT_EXERCISES, DEFAULT_SETTINGS } from "./data/defaults";
+import { PATTERNS, PRESETS, DEFAULT_EXERCISES, DEFAULT_SETTINGS } from "./data/defaults";
 import { storage } from "./storage";
 import { useWorkoutTimer, SESSION_KEY, SESSION_MAX_AGE } from "./hooks/useWorkoutTimer";
 import { useWakeLock } from "./hooks/useWakeLock";
@@ -17,6 +17,7 @@ export default function App() {
   const [circuit, setCircuit] = useState([]);
   const [loaded, setLoaded] = useState(false);
   const [resumeSession, setResumeSession] = useState(null);
+  const [activePreset, setActivePreset] = useState(null); // 프리셋 id | null — 랜덤 뽑기로 돌아가면 해제
 
   // ─── 저장/불러오기 ───
   useEffect(() => {
@@ -67,14 +68,32 @@ export default function App() {
     return pool.length ? pool[Math.floor(Math.random() * pool.length)] : null;
   };
 
-  const generate = () => setCircuit(PATTERNS.map((p) => pickRandom(p.id)).filter(Boolean));
+  const generate = () => {
+    setActivePreset(null);
+    setCircuit(PATTERNS.map((p) => pickRandom(p.id)).filter(Boolean));
+  };
 
-  // 모드 변경 — 이미 뽑아둔 서킷이 있으면 새 모드 기준으로 다시 뽑는다
+  // 모드 변경 — 이미 뽑아둔 서킷이 있으면 새 모드 기준으로 다시 뽑는다 (프리셋도 해제)
   const changeMode = (mode) => {
     const next = { ...settings, mode };
     setSettings(next);
     persist(exercises, next);
-    if (circuit.length) setCircuit(PATTERNS.map((p) => pickRandom(p.id, undefined, mode)).filter(Boolean));
+    if (circuit.length && !activePreset) {
+      setCircuit(PATTERNS.map((p) => pickRandom(p.id, undefined, mode)).filter(Boolean));
+    }
+  };
+
+  // ─── 프로그램 프리셋 ───
+  // 서고에서 지운 기본 동작도 프리셋에서는 쓸 수 있게 DEFAULT_EXERCISES까지 조회
+  const applyPreset = (preset) => {
+    const find = (id) => exercises.find((e) => e.id === id) || DEFAULT_EXERCISES.find((e) => e.id === id);
+    const circ = preset.exerciseIds.map(find).filter(Boolean);
+    if (!circ.length) return;
+    const next = { ...settings, ...preset.settings };
+    setSettings(next);
+    persist(exercises, next);
+    setCircuit(circ);
+    setActivePreset(preset.id);
   };
 
   const rerollAt = (idx) => {
@@ -173,6 +192,9 @@ export default function App() {
       generate={generate}
       rerollAt={rerollAt}
       startWorkout={startWorkout}
+      presets={PRESETS}
+      activePreset={activePreset}
+      applyPreset={applyPreset}
     />
   );
 }

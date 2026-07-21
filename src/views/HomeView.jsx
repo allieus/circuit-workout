@@ -3,7 +3,21 @@ import Header from "../components/Header";
 import InstallHint from "../components/InstallHint";
 import SettingStepper from "../components/SettingStepper";
 
-export default function HomeView({ view, setView, settings, updateSetting, changeMode, circuit, generate, rerollAt, startWorkout }) {
+export default function HomeView({
+  view,
+  setView,
+  settings,
+  updateSetting,
+  changeMode,
+  circuit,
+  generate,
+  rerollAt,
+  startWorkout,
+  presets,
+  activePreset,
+  applyPreset,
+}) {
+  const preset = presets.find((p) => p.id === activePreset);
   const totalMin = Math.round(
     (settings.prep +
       settings.rounds * circuit.length * settings.work +
@@ -32,7 +46,7 @@ export default function HomeView({ view, setView, settings, updateSetting, chang
 
       {/* 설정 */}
       <div className="settings-row">
-        <SettingStepper label="라운드" value={settings.rounds} unit="회" onChange={(v) => updateSetting("rounds", v)} min={1} max={8} />
+        <SettingStepper label="라운드" value={settings.rounds} unit="회" onChange={(v) => updateSetting("rounds", v)} min={1} max={30} />
         <SettingStepper label="운동" value={settings.work} unit="초" onChange={(v) => updateSetting("work", v)} min={10} max={120} step={5} />
         <SettingStepper label="휴식" value={settings.rest} unit="초" onChange={(v) => updateSetting("rest", v)} min={5} max={90} step={5} />
       </div>
@@ -51,6 +65,20 @@ export default function HomeView({ view, setView, settings, updateSetting, chang
         {circuit.length ? "다시 뽑기" : "서킷 뽑기"}
       </button>
 
+      {/* 프로그램 프리셋 — 정해진 순서·세트의 케틀벨 프로그램 */}
+      <div className="preset-row">
+        {presets.map((p) => (
+          <button
+            key={p.id}
+            className={`btn preset-chip ${activePreset === p.id ? "preset-chip--active" : ""}`}
+            onClick={() => applyPreset(p)}
+          >
+            {p.name}
+          </button>
+        ))}
+      </div>
+      {preset && <div className="preset-desc">{preset.desc}</div>}
+
       {circuit.length > 0 && (
         <>
           {circuit.map((e, i) => {
@@ -67,9 +95,11 @@ export default function HomeView({ view, setView, settings, updateSetting, chang
                 <a className="btn reroll-btn yt-btn" href={ytUrl(e)} target="_blank" rel="noreferrer" title="자세 영상 검색">
                   ▶
                 </a>
-                <button className="btn reroll-btn" onClick={() => rerollAt(i)} title="이 동작만 다시 뽑기">
-                  ↻
-                </button>
+                {!preset && (
+                  <button className="btn reroll-btn" onClick={() => rerollAt(i)} title="이 동작만 다시 뽑기">
+                    ↻
+                  </button>
+                )}
               </div>
             );
           })}

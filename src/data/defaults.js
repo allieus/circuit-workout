@@ -24,6 +24,32 @@ export const artUrl = (ex) => (ex.id.startsWith("u") ? null : `/art/ex_${ex.id}.
 // 자세 참고 영상: 유튜브 검색 링크
 export const ytUrl = (ex) => "https://www.youtube.com/results?search_query=" + encodeURIComponent(`${ex.name} 자세`);
 
+// ─── 프로그램 프리셋 (docs/케틀벨-7가지.md의 프로그램) ───
+// 프리셋 = 고정 순서 서킷 + 권장 타이머 설정. 적용 후 설정은 자유롭게 조정 가능.
+export const PRESETS = [
+  {
+    id: "ten50",
+    name: "10초/50초",
+    desc: "스윙 1분 1세트: 10초 운동(≈5회) + 50초 휴식 × 10세트. 30세트가 쉬워지면 무게를 올린다",
+    exerciseIds: ["k2"],
+    settings: { rounds: 10, work: 10, roundRest: 50 },
+  },
+  {
+    id: "movingTarget",
+    name: "무빙 타겟",
+    desc: "클린 → 프레스 → 스쿼트 콤플렉스, 세트마다 손 교체. 프레스 6~8회 가능한 무게로 9세트",
+    exerciseIds: ["k3", "k4", "k5"],
+    settings: { rounds: 9, work: 30, rest: 15, roundRest: 60 },
+  },
+  {
+    id: "deep6",
+    name: "딥 식스",
+    desc: "한팔 스윙 → 스내치 → 클린 → 프레스 → 스쿼트 → 겟업 연결. 고강도 — 7동작 숙련 후에만",
+    exerciseIds: ["k2", "k6", "k3", "k4", "k5", "k7"],
+    settings: { rounds: 3, work: 30, rest: 10, roundRest: 90 },
+  },
+];
+
 // 기본 동작 라이브러리 (케틀벨 + 맨몸)
 // memo는 화면에 표시되고, 음성 가이드(TTS)가 그대로 읽어준다.
 // 케틀벨 핵심 7동작은 유튜브 "하루 종일 지치지 않는 체력을 위한 운동 7가지
