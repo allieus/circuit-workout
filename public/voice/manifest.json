@@ -1,0 +1,212 @@
+{
+  "start": {
+    "file": "start.mp3",
+    "text": "시작!",
+    "hash": "5af55b24"
+  },
+  "half": {
+    "file": "half.mp3",
+    "text": "절반이에요.",
+    "hash": "242b85d1"
+  },
+  "done": {
+    "file": "done.mp3",
+    "text": "모든 라운드 완료! 수고했어요.",
+    "hash": "7332254a"
+  },
+  "prep_first": {
+    "file": "prep_first.mp3",
+    "text": "준비하세요. 첫 동작,",
+    "hash": "a75a42bf"
+  },
+  "next_is": {
+    "file": "next_is.mp3",
+    "text": "다음 동작,",
+    "hash": "7067a873"
+  },
+  "change": {
+    "file": "change.mp3",
+    "text": "동작 변경.",
+    "hash": "e9d54ad6"
+  },
+  "change_next": {
+    "file": "change_next.mp3",
+    "text": "다음 동작 변경.",
+    "hash": "2ddb2fe2"
+  },
+  "roundrest_1": {
+    "file": "roundrest_1.mp3",
+    "text": "1라운드 완료. 잠시 쉬세요.",
+    "hash": "0cb92b3e"
+  },
+  "roundrest_2": {
+    "file": "roundrest_2.mp3",
+    "text": "2라운드 완료. 잠시 쉬세요.",
+    "hash": "7d6ffaba"
+  },
+  "roundrest_3": {
+    "file": "roundrest_3.mp3",
+    "text": "3라운드 완료. 잠시 쉬세요.",
+    "hash": "fe4e32a4"
+  },
+  "roundrest_4": {
+    "file": "roundrest_4.mp3",
+    "text": "4라운드 완료. 잠시 쉬세요.",
+    "hash": "18b7b47b"
+  },
+  "roundrest_5": {
+    "file": "roundrest_5.mp3",
+    "text": "5라운드 완료. 잠시 쉬세요.",
+    "hash": "0c765146"
+  },
+  "roundrest_6": {
+    "file": "roundrest_6.mp3",
+    "text": "6라운드 완료. 잠시 쉬세요.",
+    "hash": "3d84d93d"
+  },
+  "roundrest_7": {
+    "file": "roundrest_7.mp3",
+    "text": "7라운드 완료. 잠시 쉬세요.",
+    "hash": "0399f0fe"
+  },
+  "roundstart_2": {
+    "file": "roundstart_2.mp3",
+    "text": "2라운드 시작!",
+    "hash": "337db00b"
+  },
+  "roundstart_3": {
+    "file": "roundstart_3.mp3",
+    "text": "3라운드 시작!",
+    "hash": "c88a7668"
+  },
+  "roundstart_4": {
+    "file": "roundstart_4.mp3",
+    "text": "4라운드 시작!",
+    "hash": "2f6a2599"
+  },
+  "roundstart_5": {
+    "file": "roundstart_5.mp3",
+    "text": "5라운드 시작!",
+    "hash": "0011f33e"
+  },
+  "roundstart_6": {
+    "file": "roundstart_6.mp3",
+    "text": "6라운드 시작!",
+    "hash": "0bae3ada"
+  },
+  "roundstart_7": {
+    "file": "roundstart_7.mp3",
+    "text": "7라운드 시작!",
+    "hash": "f31321a5"
+  },
+  "roundstart_8": {
+    "file": "roundstart_8.mp3",
+    "text": "8라운드 시작!",
+    "hash": "2437e35d"
+  },
+  "ex_k1": {
+    "file": "ex_k1.mp3",
+    "text": "양손 케틀벨 스윙. 힙 힌지로 가랑이 사이에 던졌다 발사, 어깨 높이까지",
+    "hash": "825520ff"
+  },
+  "ex_k2": {
+    "file": "ex_k2.mp3",
+    "text": "한팔 케틀벨 스윙. 빈손은 손잡이 터치, 몸통 비틀림 방지",
+    "hash": "d1c7010a"
+  },
+  "ex_k5": {
+    "file": "ex_k5.mp3",
+    "text": "케틀벨 스쿼트. 클린 랙 상태 그대로 앉았다 일어나기",
+    "hash": "976984cd"
+  },
+  "ex_d1": {
+    "file": "ex_d1.mp3",
+    "text": "고블릿 스쿼트. 케틀벨 가슴 앞, 팔꿈치 무릎 안쪽",
+    "hash": "ef762b9e"
+  },
+  "ex_d3": {
+    "file": "ex_d3.mp3",
+    "text": "교대 런지. 무릎이 발끝 넘지 않게",
+    "hash": "5bd3474d"
+  },
+  "ex_d4": {
+    "file": "ex_d4.mp3",
+    "text": "케틀벨 데드리프트. 허리 곧게, 시선 정면",
+    "hash": "c1bf8fd8"
+  },
+  "ex_k4": {
+    "file": "ex_k4.mp3",
+    "text": "케틀벨 프레스. 클린 상태에서 수직으로 밀기, 전완 수직 유지",
+    "hash": "e56cbe8e"
+  },
+  "ex_d5": {
+    "file": "ex_d5.mp3",
+    "text": "푸시업. 몸통 일직선 유지",
+    "hash": "b6a6777e"
+  },
+  "ex_d7": {
+    "file": "ex_d7.mp3",
+    "text": "파이크 푸시업. 어깨 타깃, 엉덩이 높게",
+    "hash": "547bc7b5"
+  },
+  "ex_d8": {
+    "file": "ex_d8.mp3",
+    "text": "한팔 로우. 케틀벨, 등으로 당기기",
+    "hash": "3afd0204"
+  },
+  "ex_d10": {
+    "file": "ex_d10.mp3",
+    "text": "케틀벨 하이풀. 이마 가까이, 팔꿈치 높게",
+    "hash": "256b1f1c"
+  },
+  "ex_d9": {
+    "file": "ex_d9.mp3",
+    "text": "슈퍼맨. 팔다리 동시에 들어올리기",
+    "hash": "60ba33cb"
+  },
+  "ex_d11": {
+    "file": "ex_d11.mp3",
+    "text": "플랭크. 엉덩이 처지지 않게",
+    "hash": "67b4b094"
+  },
+  "ex_d12": {
+    "file": "ex_d12.mp3",
+    "text": "러시안 트위스트. 케틀벨 들고 좌우 회전",
+    "hash": "d021ccc4"
+  },
+  "ex_d13": {
+    "file": "ex_d13.mp3",
+    "text": "데드버그. 허리 바닥에 붙이기",
+    "hash": "d041af82"
+  },
+  "ex_d14": {
+    "file": "ex_d14.mp3",
+    "text": "마운틴 클라이머. 빠르게, 코어 고정",
+    "hash": "304ef25c"
+  },
+  "ex_k3": {
+    "file": "ex_k3.mp3",
+    "text": "케틀벨 클린. 턱에 어퍼컷 찌르듯, 손목 꺾이지 않게",
+    "hash": "f14dcb9b"
+  },
+  "ex_k6": {
+    "file": "ex_k6.mp3",
+    "text": "케틀벨 스내치. 하이풀에서 손을 위로, 스윙보다 가벼운 무게로",
+    "hash": "fd1e2ac7"
+  },
+  "ex_k7": {
+    "file": "ex_k7.mp3",
+    "text": "터키시 겟업. 케틀벨에서 시선 떼지 말고, 순서대로 천천히",
+    "hash": "888f9afb"
+  },
+  "ex_d15": {
+    "file": "ex_d15.mp3",
+    "text": "버피. 본인 페이스로",
+    "hash": "33776cf6"
+  },
+  "ex_d17": {
+    "file": "ex_d17.mp3",
+    "text": "점핑잭. 가볍게 리듬 타기",
+    "hash": "51d7a303"
+  }
+}

@@ -26,6 +26,8 @@ export default defineConfig({
         ],
       },
       workbox: {
+        // 음성 클립(voice/*.mp3)까지 프리캐시 — 오프라인에서도 음성 가이드 동작
+        globPatterns: ["**/*.{js,css,html,svg,png,webmanifest}", "voice/*.{mp3,json}"],
         // 구글 폰트는 첫 온라인 로드 때 캐시해 이후 오프라인에서도 유지
         runtimeCaching: [
           {

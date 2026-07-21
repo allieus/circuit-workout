@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
-import { beep, speak, stopSpeech } from "../audio";
+import { beep, speakGuide, stopSpeech, prefetchClips } from "../audio";
 
 // 타이머 상태 머신: phase ∈ idle | ready | work | rest | roundRest | done
 // 흐름: 준비(prep초) → [운동(work초) → 휴식(rest초)] × 동작 수 → 라운드 휴식(roundRest초) → ... → 완료
@@ -18,7 +18,8 @@ export function useWorkoutTimer({ circuit, settings, rerollAt }) {
   const settingsRef = useRef(settings); // stale closure 회피
   settingsRef.current = settings;
 
-  const say = (text) => speak(text, settingsRef.current.voice);
+  // keys: 사전 생성 클립 키 배열, text: 클립이 없을 때 Web Speech가 읽을 폴백 문장
+  const say = (keys, text) => speakGuide(keys, text, settingsRef.current.voice);
 
   const start = () => {
     if (!circuit.length) return;
@@ -29,9 +30,14 @@ export function useWorkoutTimer({ circuit, settings, rerollAt }) {
     setPaused(false);
     startTimeRef.current = Date.now();
     halfSpokenRef.current = false;
+    // 이번 세션에 쓸 클립 프리페치 — 발화 지연 제거
+    const keys = ["start", "half", "done", "prep_first", "next_is", "change", "change_next"];
+    for (let n = 1; n < settings.rounds; n++) keys.push(`roundrest_${n}`, `roundstart_${n + 1}`);
+    circuit.forEach((e) => keys.push(`ex_${e.id}`));
+    prefetchClips(keys);
     beep(1100, 0.2);
     const first = circuit[0];
-    say(`준비하세요. 첫 동작, ${first.name}. ${first.memo || ""}`);
+    say(["prep_first", `ex_${first.id}`], `준비하세요. 첫 동작, ${first.name}. ${first.memo || ""}`);
   };
 
   // 단계 전환 — 스킵 버튼과 자동 진행이 함께 사용
@@ -41,7 +47,7 @@ export function useWorkoutTimer({ circuit, settings, rerollAt }) {
       setPhase("work");
       setSecondsLeft(settings.work);
       beep(1100, 0.2);
-      say("시작!");
+      say(["start"], "시작!");
       return;
     }
     if (phase === "work") {
@@ -51,21 +57,21 @@ export function useWorkoutTimer({ circuit, settings, rerollAt }) {
         setPhase("done");
         setSecondsLeft(0);
         beep(1320, 0.4);
-        say("모든 라운드 완료! 수고했어요.");
+        say(["done"], "모든 라운드 완료! 수고했어요.");
         return;
       }
       if (lastEx) {
         setPhase("roundRest");
         setSecondsLeft(settings.roundRest);
         beep(440, 0.15);
-        say(`${roundIdx + 1}라운드 완료. 잠시 쉬세요.`);
+        say([`roundrest_${roundIdx + 1}`], `${roundIdx + 1}라운드 완료. 잠시 쉬세요.`);
         return;
       }
       const nx = circuit[exIdx + 1];
       setPhase("rest");
       setSecondsLeft(settings.rest);
       beep(440, 0.15);
-      say(`다음은 ${nx.name}입니다. ${nx.memo || ""}`);
+      say(["next_is", `ex_${nx.id}`], `다음은 ${nx.name}입니다. ${nx.memo || ""}`);
       return;
     }
     if (phase === "rest") {
@@ -73,7 +79,7 @@ export function useWorkoutTimer({ circuit, settings, rerollAt }) {
       setPhase("work");
       setSecondsLeft(settings.work);
       beep(1100, 0.2);
-      say("시작!");
+      say(["start"], "시작!");
       return;
     }
     if (phase === "roundRest") {
@@ -83,7 +89,7 @@ export function useWorkoutTimer({ circuit, settings, rerollAt }) {
       setSecondsLeft(settings.work);
       beep(1100, 0.2);
       const first = circuit[0];
-      say(`${roundIdx + 2}라운드 시작! ${first.name}`);
+      say([`roundstart_${roundIdx + 2}`, `ex_${first.id}`], `${roundIdx + 2}라운드 시작! ${first.name}`);
       return;
     }
   };
@@ -110,7 +116,7 @@ export function useWorkoutTimer({ circuit, settings, rerollAt }) {
       !halfSpokenRef.current
     ) {
       halfSpokenRef.current = true;
-      say("절반이에요.");
+      say(["half"], "절반이에요.");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [secondsLeft]);
@@ -131,7 +137,11 @@ export function useWorkoutTimer({ circuit, settings, rerollAt }) {
   const rerollLive = () => {
     const target = phase === "rest" ? exIdx + 1 : exIdx;
     const next = rerollAt(target);
-    if (next) say(`${phase === "rest" ? "다음 동작 변경. " : "동작 변경. "}${next.name}. ${next.memo || ""}`);
+    if (next)
+      say(
+        [phase === "rest" ? "change_next" : "change", `ex_${next.id}`],
+        `${phase === "rest" ? "다음 동작 변경. " : "동작 변경. "}${next.name}. ${next.memo || ""}`
+      );
   };
 
   const elapsedMinutes = () =>

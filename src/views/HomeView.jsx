@@ -1,5 +1,6 @@
 import { patternOf } from "../data/defaults";
 import Header from "../components/Header";
+import InstallHint from "../components/InstallHint";
 import SettingStepper from "../components/SettingStepper";
 
 export default function HomeView({ view, setView, settings, updateSetting, circuit, generate, rerollAt, startWorkout }) {
@@ -14,6 +15,7 @@ export default function HomeView({ view, setView, settings, updateSetting, circu
   return (
     <div className="app">
       <Header view={view} setView={setView} />
+      <InstallHint />
 
       {/* 설정 */}
       <div className="settings-row">

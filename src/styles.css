@@ -121,6 +121,41 @@ button {
   color: var(--bg);
 }
 
+/* ─── 홈 화면 추가 안내 ─── */
+.install-hint {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 12px;
+  margin-bottom: 14px;
+}
+
+.install-hint-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 13px;
+}
+
+.install-hint-text b {
+  font-size: 13.5px;
+}
+
+.install-hint-text span {
+  opacity: 0.65;
+}
+
+.install-hint-close {
+  background: transparent;
+  color: var(--muted);
+  font-size: 14px;
+  padding: 4px 6px;
+}
+
 /* ─── 홈: 설정 스테퍼 ─── */
 .settings-row {
   display: flex;

@@ -15,16 +15,17 @@ npm install
 npm run dev        # http://localhost:5173 — server.host=true라 같은 와이파이 폰에서도 접속 가능
 npm run build      # dist/ + 서비스워커(precache) 생성
 npm run preview    # 빌드 결과 확인 (SW 포함 동작은 preview에서 확인)
+npm run voice      # ElevenLabs 음성 클립 재생성 — .env의 ELEVENLABS_API_KEY 필요
 ```
 
 ## 구조
 
 ```
 src/
-  main.jsx                 # 엔트리 — SW 등록(virtual:pwa-register)
+  main.jsx                 # 엔트리 — SW 등록(virtual:pwa-register) + 음성 매니페스트 로드
   App.jsx                  # 상태 소유(운동 서고·설정·서킷) + 화면 전환(home/library/timer)
   styles.css               # 전체 스타일 — 디자인 토큰(CSS 변수) + 클래스. 동적 색만 인라인
-  audio.js                 # beep(Web Audio) + speak/stopSpeech(Web Speech ko-KR)
+  audio.js                 # beep(Web Audio) + 음성 클립 플레이어(speakGuide) + Web Speech 폴백
   storage.js               # 스토리지 어댑터 — localStorage 구현, 아티팩트의 window.storage 인터페이스 유지
   data/defaults.js         # PATTERNS(5패턴+색), patternOf, DEFAULT_EXERCISES(기본 21동작), DEFAULT_SETTINGS
   hooks/
@@ -37,7 +38,11 @@ src/
   components/
     Header.jsx             # 로고 + home/library 탭
     SettingStepper.jsx     # −/+ 스테퍼
+    InstallHint.jsx        # 홈 화면 추가 안내 배너 (iOS/Android 브라우저 접속 시, 닫으면 localStorage 기억)
+scripts/
+  generate-voice.mjs       # ElevenLabs 클립 사전 생성 (npm run voice)
 public/                    # PWA 아이콘 (icon-192/512, maskable, apple-touch-icon, favicon.svg)
+  voice/                   # 사전 생성된 음성 클립(mp3 42개) + manifest.json — 커밋 대상
 docs/
   기획.md                  # 타이머 5단계 흐름과 음성 가이드 스펙 (기능의 정본 문서)
   케틀벨-7가지.md          # 기본 동작의 근거 자료 + 프리셋 아이디어
@@ -49,10 +54,10 @@ docs/
   - 흐름: 준비(prep초) → [운동(work초) → 휴식(rest초)] × 동작 수 → 라운드 휴식(roundRest초) → ... → 완료
   - 마지막 라운드 마지막 동작 뒤에는 바로 done. rest는 라운드 내 동작 사이에만 발생.
   - 구현: 1초 interval이 `secondsLeft`만 감소 → `secondsLeft` 변화를 감시하는 useEffect가 0이면 `advance()` 호출. **스킵 버튼도 `setSecondsLeft(0)`으로 같은 경로를 탄다** — 전환 로직은 advance() 한 곳에만 둘 것.
-- **음성 가이드(TTS)** (`audio.js`): Web Speech API `speechSynthesis`, lang=ko-KR. 준비/시작/절반/휴식(다음 동작+memo 낭독)/라운드 완료/전체 완료 시점에 발화. `settingsRef`로 stale closure 회피. 모바일 브라우저는 사용자 제스처 이후에만 소리 허용 — "시작" 버튼 탭이 그 역할.
+- **음성 가이드** (`audio.js` + `public/voice/`): 발화는 전부 템플릿이라 조합이 유한 — 고정 문구·라운드 숫자·동작(이름+memo)을 ElevenLabs(Anna Kim, eleven_multilingual_v2)로 **사전 생성**해 정적 mp3로 배포. 런타임 API 호출 0회, 오프라인 동작, 키 노출 없음. `speakGuide(keys, fallbackText, enabled)`가 클립을 AudioContext로 이어붙여 재생하고, 클립이 없는 발화(**사용자 추가 동작** 등)는 Web Speech(ko-KR)로 폴백. 타이머 시작 시 그 세션의 클립을 프리페치. 모바일 브라우저는 사용자 제스처 이후에만 소리 허용 — "시작" 버튼 탭이 AudioContext를 unlock. **기본 동작의 name/memo를 바꾸면 `npm run voice`로 클립 재생성 필수**(텍스트 해시 비교로 바뀐 것만 재생성).
 - **동작 교체(reroll)** (`App.jsx`): 같은 패턴 풀에서 현재 동작 제외 후 랜덤. 타이머 중에도 가능(운동 중→현재 동작, 휴식 중→다음 동작).
 - **저장** (`storage.js`): 단일 키 `circuit-app-v1`에 `{exercises, settings}` JSON 통합 저장. 키를 쪼개지 말 것.
-- **PWA** (`vite.config.js`): vite-plugin-pwa `autoUpdate`. manifest는 standalone·portrait·ko. 구글 폰트는 workbox runtimeCaching으로 첫 로드 후 오프라인 유지. SW·manifest가 동작하려면 HTTPS 배포 필요(로컬 dev는 예외).
+- **PWA** (`vite.config.js`): vite-plugin-pwa `autoUpdate`. manifest는 standalone·portrait·ko. 음성 클립까지 프리캐시(globPatterns), 구글 폰트는 workbox runtimeCaching으로 첫 로드 후 오프라인 유지. SW·manifest가 동작하려면 HTTPS 배포 필요(로컬 dev는 예외). 배포: Vercel `circuit-workout` 프로젝트, 프로덕션 https://circuit-workout-two.vercel.app
 - **Wake Lock** (`hooks/useWakeLock.js`): 타이머 진행 중(phase가 idle/done이 아닐 때)만 활성. 화면을 다녀오면 자동 해제되므로 visibilitychange에서 재획득.
 
 ## 규약
