@@ -11,22 +11,42 @@ export default function TimerView({ circuit, settings, updateSetting, timer, sto
   const total =
     { ready: settings.prep, work: settings.work, rest: settings.rest, roundRest: settings.roundRest }[phase] || 1;
   const progress = 1 - secondsLeft / total;
+  // 라운드 내 진행 위치 — 휴식 중에는 다음 동작이 진행 대상
+  const activeIdx = phase === "rest" ? exIdx + 1 : exIdx;
+  const showSteps = phase === "ready" || phase === "work" || phase === "rest";
 
   return (
     <div className="app app--timer" style={{ background: bg }}>
-      {/* 상단 바 */}
-      <div className="timer-top">
-        <div className="display timer-round">
-          {phase === "done" ? "완료" : `라운드 ${roundIdx + 1} / ${settings.rounds}`}
+      {/* 상단: 바 + 라운드 내 진행 스텝 */}
+      <div>
+        <div className="timer-top">
+          <div className="display timer-round">
+            {phase === "done" ? "완료" : `라운드 ${roundIdx + 1} / ${settings.rounds}`}
+          </div>
+          <div className="timer-top-actions">
+            <button className="btn timer-chip" onClick={() => updateSetting("voice", !settings.voice)}>
+              {settings.voice ? "🔊" : "🔇"}
+            </button>
+            <button className="btn timer-chip" onClick={stopWorkout}>
+              종료
+            </button>
+          </div>
         </div>
-        <div className="timer-top-actions">
-          <button className="btn timer-chip" onClick={() => updateSetting("voice", !settings.voice)}>
-            {settings.voice ? "🔊" : "🔇"}
-          </button>
-          <button className="btn timer-chip" onClick={stopWorkout}>
-            종료
-          </button>
-        </div>
+        {showSteps && (
+          <div className="timer-steps">
+            {circuit.map((e, i) => (
+              <span
+                key={e.id + i}
+                className={`timer-step ${
+                  i < activeIdx ? "timer-step--done" : i === activeIdx ? "timer-step--active" : ""
+                }`}
+              />
+            ))}
+            <span className="timer-steps-label">
+              동작 {Math.min(activeIdx + 1, circuit.length)} / {circuit.length}
+            </span>
+          </div>
+        )}
       </div>
 
       {/* 중앙 */}
