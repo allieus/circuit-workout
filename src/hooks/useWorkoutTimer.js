@@ -108,7 +108,10 @@ export function useWorkoutTimer({ circuit, settings, rerollAt }) {
       advance();
       return;
     }
+    // 초 단위 소리 3계층: 매초 잔잔한 틱 → 10초 이내 중간 톤 → 마지막 3초 강한 비프
     if (secondsLeft <= 3) beep(660, 0.08);
+    else if (secondsLeft <= 10) beep(520, 0.06, 0.14);
+    else beep(1250, 0.02, 0.05);
     if (
       phase === "work" &&
       settings.work >= 20 &&

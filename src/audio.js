@@ -12,7 +12,7 @@ function ensureCtx() {
   return ctx;
 }
 
-export function beep(freq = 880, dur = 0.12) {
+export function beep(freq = 880, dur = 0.12, vol = 0.25) {
   try {
     const c = ensureCtx();
     const osc = c.createOscillator();
@@ -20,7 +20,7 @@ export function beep(freq = 880, dur = 0.12) {
     osc.frequency.value = freq;
     osc.connect(gain);
     gain.connect(c.destination);
-    gain.gain.setValueAtTime(0.25, c.currentTime);
+    gain.gain.setValueAtTime(vol, c.currentTime);
     gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + dur);
     osc.start();
     osc.stop(c.currentTime + dur);
