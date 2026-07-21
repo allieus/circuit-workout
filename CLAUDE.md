@@ -18,6 +18,8 @@ npm run preview    # 빌드 결과 확인 (SW 포함 동작은 preview에서 확
 npm run voice      # ElevenLabs 음성 클립 재생성 — .env의 ELEVENLABS_API_KEY 필요
 ```
 
+자세 삽화 재생성: `codex exec`의 imagegen 도구 사용 (스타일 프롬프트는 아래 규약 참조). 1024px 원본 생성 후 512px webp로 축소해 `public/art/ex_<id>.webp`로 저장.
+
 ## 구조
 
 ```
@@ -27,7 +29,7 @@ src/
   styles.css               # 전체 스타일 — 디자인 토큰(CSS 변수) + 클래스. 동적 색만 인라인
   audio.js                 # beep(Web Audio) + 음성 클립 플레이어(speakGuide) + Web Speech 폴백
   storage.js               # 스토리지 어댑터 — localStorage 구현, 아티팩트의 window.storage 인터페이스 유지
-  data/defaults.js         # PATTERNS(5패턴+색), patternOf, DEFAULT_EXERCISES(기본 21동작), DEFAULT_SETTINGS
+  data/defaults.js         # PATTERNS(5패턴+색), MODES(운동 모드), DEFAULT_EXERCISES(기본 21동작+equip), DEFAULT_SETTINGS, artUrl/ytUrl
   hooks/
     useWorkoutTimer.js     # 타이머 상태 머신 전체 (advance 로직의 유일한 위치)
     useWakeLock.js         # 타이머 중 화면 꺼짐 방지 + visibilitychange 재획득
@@ -39,10 +41,12 @@ src/
     Header.jsx             # 로고 + home/library 탭
     SettingStepper.jsx     # −/+ 스테퍼
     InstallHint.jsx        # 홈 화면 추가 안내 배너 (iOS/Android 브라우저 접속 시, 닫으면 localStorage 기억)
+    ExerciseArt.jsx        # 자세 삽화 img — 없으면 onError로 숨김, key=ex.id로 교체 시 리셋
 scripts/
   generate-voice.mjs       # ElevenLabs 클립 사전 생성 (npm run voice)
 public/                    # PWA 아이콘 (icon-192/512, maskable, apple-touch-icon, favicon.svg)
   voice/                   # 사전 생성된 음성 클립(mp3 42개) + manifest.json — 커밋 대상
+  art/                     # 사전 생성된 자세 삽화(webp 21개, 기본 동작 전용) — 커밋 대상
 docs/
   기획.md                  # 타이머 5단계 흐름과 음성 가이드 스펙 (기능의 정본 문서)
   케틀벨-7가지.md          # 기본 동작의 근거 자료 + 프리셋 아이디어
@@ -56,6 +60,9 @@ docs/
   - 구현: 1초 interval이 `secondsLeft`만 감소 → `secondsLeft` 변화를 감시하는 useEffect가 0이면 `advance()` 호출. **스킵 버튼도 `setSecondsLeft(0)`으로 같은 경로를 탄다** — 전환 로직은 advance() 한 곳에만 둘 것.
 - **음성 가이드** (`audio.js` + `public/voice/`): 발화는 전부 템플릿이라 조합이 유한 — 고정 문구·라운드 숫자·동작(이름+memo)을 ElevenLabs(Anna Kim, eleven_multilingual_v2)로 **사전 생성**해 정적 mp3로 배포. 런타임 API 호출 0회, 오프라인 동작, 키 노출 없음. `speakGuide(keys, fallbackText, enabled)`가 클립을 AudioContext로 이어붙여 재생하고, 클립이 없는 발화(**사용자 추가 동작** 등)는 Web Speech(ko-KR)로 폴백. 타이머 시작 시 그 세션의 클립을 프리페치. 모바일 브라우저는 사용자 제스처 이후에만 소리 허용 — "시작" 버튼 탭이 AudioContext를 unlock. **기본 동작의 name/memo를 바꾸면 `npm run voice`로 클립 재생성 필수**(텍스트 해시 비교로 바뀐 것만 재생성).
 - **동작 교체(reroll)** (`App.jsx`): 같은 패턴 풀에서 현재 동작 제외 후 랜덤. 타이머 중에도 가능(운동 중→현재 동작, 휴식 중→다음 동작).
+- **운동 모드** (`App.jsx` pickRandom): `settings.mode ∈ all | kb | body` — 동작의 `equip` 태그로 풀을 필터. 모드에 맞는 동작이 패턴에 없으면 모드 무시하고 패턴 전체에서 뽑는 폴백. 모드 변경 시 뽑아둔 서킷이 있으면 즉시 다시 뽑는다. equip 없는 동작(구버전 사용자 추가분)은 "전체"에서만 등장.
+- **자세 삽화** (`public/art/` + `ExerciseArt.jsx`): codex imagegen으로 사전 생성한 픽토그램. 스타일: 정사각형·주철색(#1E2126) 단색 배경·초크 화이트(#F2EFE9) 굵은 라인·전신 실루엣·디테일/텍스트 없음. 타이머(준비/운동/휴식)와 서고 목록에 표시. 사용자 추가 동작(id가 "u"로 시작)은 삽화 없음 — artUrl이 null 반환.
+- **참고 영상**: 동작별 유튜브 검색 링크(ytUrl — "동작이름 자세" 검색). 홈 카드 ▶ 버튼, 서고 "▶ 영상" 링크.
 - **저장** (`storage.js`): 단일 키 `circuit-app-v1`에 `{exercises, settings}` JSON 통합 저장. 키를 쪼개지 말 것.
 - **PWA** (`vite.config.js`): vite-plugin-pwa `autoUpdate`. manifest는 standalone·portrait·ko. 음성 클립까지 프리캐시(globPatterns), 구글 폰트는 workbox runtimeCaching으로 첫 로드 후 오프라인 유지. SW·manifest가 동작하려면 HTTPS 배포 필요(로컬 dev는 예외). 배포: Vercel `circuit-workout` 프로젝트, 프로덕션 https://circuit-workout-two.vercel.app
 - **Wake Lock** (`hooks/useWakeLock.js`): 타이머 진행 중(phase가 idle/done이 아닐 때)만 활성. 화면을 다녀오면 자동 해제되므로 visibilitychange에서 재획득.

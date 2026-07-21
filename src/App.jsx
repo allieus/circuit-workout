@@ -43,16 +43,24 @@ export default function App() {
   };
 
   // ─── 서킷 생성 ───
-  const pickRandom = (patternId, excludeId) => {
-    const pool = exercises.filter((e) => e.pattern === patternId && e.id !== excludeId);
-    if (!pool.length) {
-      const fb = exercises.filter((e) => e.pattern === patternId);
-      return fb.length ? fb[Math.floor(Math.random() * fb.length)] : null;
-    }
-    return pool[Math.floor(Math.random() * pool.length)];
+  // 모드 필터에 맞는 동작이 패턴에 하나도 없으면 모드를 무시하고 패턴 전체에서 뽑는다
+  const pickRandom = (patternId, excludeId, mode = settings.mode || "all") => {
+    const inMode = (e) => mode === "all" || e.equip === mode;
+    let pool = exercises.filter((e) => e.pattern === patternId && inMode(e) && e.id !== excludeId);
+    if (!pool.length) pool = exercises.filter((e) => e.pattern === patternId && inMode(e));
+    if (!pool.length) pool = exercises.filter((e) => e.pattern === patternId);
+    return pool.length ? pool[Math.floor(Math.random() * pool.length)] : null;
   };
 
   const generate = () => setCircuit(PATTERNS.map((p) => pickRandom(p.id)).filter(Boolean));
+
+  // 모드 변경 — 이미 뽑아둔 서킷이 있으면 새 모드 기준으로 다시 뽑는다
+  const changeMode = (mode) => {
+    const next = { ...settings, mode };
+    setSettings(next);
+    persist(exercises, next);
+    if (circuit.length) setCircuit(PATTERNS.map((p) => pickRandom(p.id, undefined, mode)).filter(Boolean));
+  };
 
   const rerollAt = (idx) => {
     const cur = circuit[idx];
@@ -63,8 +71,8 @@ export default function App() {
   };
 
   // ─── 라이브러리 ───
-  const addExercise = (pattern, name, memo) => {
-    const ex = { id: "u" + Date.now(), pattern, name, memo };
+  const addExercise = (pattern, name, memo, equip) => {
+    const ex = { id: "u" + Date.now(), pattern, name, memo, equip };
     const next = [...exercises, ex];
     setExercises(next);
     persist(next, settings);
@@ -136,6 +144,7 @@ export default function App() {
       setView={setView}
       settings={settings}
       updateSetting={updateSetting}
+      changeMode={changeMode}
       circuit={circuit}
       generate={generate}
       rerollAt={rerollAt}

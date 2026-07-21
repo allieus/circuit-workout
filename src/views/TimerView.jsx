@@ -1,4 +1,5 @@
 import { PATTERNS, patternOf } from "../data/defaults";
+import ExerciseArt from "../components/ExerciseArt";
 
 export default function TimerView({ circuit, settings, updateSetting, timer, stopWorkout }) {
   const { phase, roundIdx, exIdx, secondsLeft, paused } = timer;
@@ -80,6 +81,7 @@ export default function TimerView({ circuit, settings, updateSetting, timer, sto
           {phase === "ready" && cur && (
             <>
               <div className="timer-hint">첫 동작</div>
+              <ExerciseArt ex={cur} className="timer-art" />
               <div className="display timer-exname" style={{ color: p.color }}>
                 {cur.name}
               </div>
@@ -88,13 +90,15 @@ export default function TimerView({ circuit, settings, updateSetting, timer, sto
           )}
           {isWork && cur && (
             <>
-              <div className="display timer-exname timer-exname--work">{cur.name}</div>
+              <ExerciseArt ex={cur} className="timer-art timer-art--work" />
+              <div className="display timer-exname">{cur.name}</div>
               {cur.memo && <div className="timer-memo timer-memo--work">{cur.memo}</div>}
             </>
           )}
           {phase === "rest" && nextEx && (
             <>
               <div className="timer-hint">다음 동작</div>
+              <ExerciseArt ex={nextEx} className="timer-art" />
               <div className="display timer-exname" style={{ color: patternOf(nextEx).color }}>
                 {nextEx.name}
               </div>

@@ -1,9 +1,9 @@
-import { patternOf } from "../data/defaults";
+import { MODES, patternOf, ytUrl } from "../data/defaults";
 import Header from "../components/Header";
 import InstallHint from "../components/InstallHint";
 import SettingStepper from "../components/SettingStepper";
 
-export default function HomeView({ view, setView, settings, updateSetting, circuit, generate, rerollAt, startWorkout }) {
+export default function HomeView({ view, setView, settings, updateSetting, changeMode, circuit, generate, rerollAt, startWorkout }) {
   const totalMin = Math.round(
     (settings.prep +
       settings.rounds * circuit.length * settings.work +
@@ -16,6 +16,19 @@ export default function HomeView({ view, setView, settings, updateSetting, circu
     <div className="app">
       <Header view={view} setView={setView} />
       <InstallHint />
+
+      {/* 운동 모드 */}
+      <div className="mode-row">
+        {MODES.map((m) => (
+          <button
+            key={m.id}
+            className={`btn mode-btn ${(settings.mode || "all") === m.id ? "mode-btn--active" : ""}`}
+            onClick={() => changeMode(m.id)}
+          >
+            {m.label}
+          </button>
+        ))}
+      </div>
 
       {/* 설정 */}
       <div className="settings-row">
@@ -51,6 +64,9 @@ export default function HomeView({ view, setView, settings, updateSetting, circu
                   <div className="circuit-name">{e.name}</div>
                   {e.memo && <div className="circuit-memo">{e.memo}</div>}
                 </div>
+                <a className="btn reroll-btn yt-btn" href={ytUrl(e)} target="_blank" rel="noreferrer" title="자세 영상 검색">
+                  ▶
+                </a>
                 <button className="btn reroll-btn" onClick={() => rerollAt(i)} title="이 동작만 다시 뽑기">
                   ↻
                 </button>

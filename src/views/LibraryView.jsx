@@ -1,16 +1,21 @@
 import { useState } from "react";
 
-import { PATTERNS } from "../data/defaults";
+import { MODES, PATTERNS, ytUrl } from "../data/defaults";
+import ExerciseArt from "../components/ExerciseArt";
 import Header from "../components/Header";
+
+const EQUIPS = MODES.filter((m) => m.id !== "all");
+const equipLabel = (id) => EQUIPS.find((m) => m.id === id)?.label;
 
 export default function LibraryView({ view, setView, exercises, addExercise, removeExercise }) {
   const [newName, setNewName] = useState("");
   const [newMemo, setNewMemo] = useState("");
   const [newPattern, setNewPattern] = useState("lower");
+  const [newEquip, setNewEquip] = useState("body");
 
   const submit = () => {
     if (!newName.trim()) return;
-    addExercise(newPattern, newName.trim(), newMemo.trim());
+    addExercise(newPattern, newName.trim(), newMemo.trim(), newEquip);
     setNewName("");
     setNewMemo("");
   };
@@ -30,6 +35,17 @@ export default function LibraryView({ view, setView, exercises, addExercise, rem
               style={newPattern === p.id ? { background: p.color, color: "#1E2126" } : undefined}
             >
               {p.label}
+            </button>
+          ))}
+        </div>
+        <div className="pattern-picker">
+          {EQUIPS.map((m) => (
+            <button
+              key={m.id}
+              className={`btn pattern-chip ${newEquip === m.id ? "pattern-chip--active" : ""}`}
+              onClick={() => setNewEquip(m.id)}
+            >
+              {m.label}
             </button>
           ))}
         </div>
@@ -61,10 +77,17 @@ export default function LibraryView({ view, setView, exercises, addExercise, rem
             </div>
             {list.map((e) => (
               <div key={e.id} className="exercise-row" style={{ borderLeftColor: p.color }}>
-                <div>
-                  <div className="exercise-name">{e.name}</div>
+                <ExerciseArt ex={e} className="exercise-thumb" />
+                <div className="exercise-info">
+                  <div className="exercise-name">
+                    {e.name}
+                    {equipLabel(e.equip) && <span className="equip-tag">{equipLabel(e.equip)}</span>}
+                  </div>
                   {e.memo && <div className="exercise-memo">{e.memo}</div>}
                 </div>
+                <a className="yt-link" href={ytUrl(e)} target="_blank" rel="noreferrer" title="자세 영상 검색">
+                  ▶ 영상
+                </a>
                 <button className="btn remove-btn" onClick={() => removeExercise(e.id)}>
                   삭제
                 </button>

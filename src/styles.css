@@ -156,6 +156,26 @@ button {
   padding: 4px 6px;
 }
 
+/* ─── 홈: 운동 모드 ─── */
+.mode-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.mode-btn {
+  flex: 1;
+  padding: 10px 0;
+  font-size: 14px;
+  background: var(--surface);
+  color: var(--text-dim);
+}
+
+.mode-btn--active {
+  background: var(--text);
+  color: var(--bg);
+}
+
 /* ─── 홈: 설정 스테퍼 ─── */
 .settings-row {
   display: flex;
@@ -280,6 +300,13 @@ button {
   font-size: 13px;
 }
 
+.yt-btn {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .start-btn {
   width: 100%;
   padding: 20px 0;
@@ -338,6 +365,11 @@ button {
   font-size: 13px;
   background: var(--surface-2);
   color: var(--text-dim);
+}
+
+.pattern-chip--active {
+  background: var(--text);
+  color: var(--bg);
 }
 
 .input {
@@ -402,9 +434,29 @@ button {
   margin-bottom: 6px;
 }
 
+.exercise-thumb {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  flex-shrink: 0;
+  margin-right: 10px;
+}
+
+.exercise-info {
+  flex: 1;
+  min-width: 0;
+}
+
 .exercise-name {
   font-size: 15px;
   font-weight: 700;
+}
+
+.equip-tag {
+  font-size: 11px;
+  font-weight: 400;
+  opacity: 0.5;
+  margin-left: 6px;
 }
 
 .exercise-memo {
@@ -413,11 +465,21 @@ button {
   margin-top: 2px;
 }
 
+.yt-link {
+  color: var(--text-dim);
+  font-size: 12.5px;
+  font-weight: 700;
+  text-decoration: none;
+  padding: 4px 6px;
+  flex-shrink: 0;
+}
+
 .remove-btn {
   background: transparent;
   color: var(--muted);
   font-size: 13px;
   padding: 4px 8px;
+  flex-shrink: 0;
 }
 
 .pattern-empty {
@@ -528,7 +590,17 @@ button {
   line-height: 1.2;
 }
 
-.timer-exname--work {
+/* 자세 삽화 — 작은 화면에서 하단 컨트롤을 밀어내지 않게 vh로 상한 */
+.timer-art {
+  display: block;
+  width: min(148px, 19vh);
+  height: min(148px, 19vh);
+  margin: 12px auto 8px;
+  border-radius: 18px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+}
+
+.timer-art--work {
   margin-top: 18px;
 }
 
