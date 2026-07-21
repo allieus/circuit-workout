@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import { PATTERNS, DEFAULT_EXERCISES, DEFAULT_SETTINGS } from "./data/defaults";
 import { storage } from "./storage";
-import { useWorkoutTimer } from "./hooks/useWorkoutTimer";
+import { useWorkoutTimer, SESSION_KEY, SESSION_MAX_AGE } from "./hooks/useWorkoutTimer";
 import { useWakeLock } from "./hooks/useWakeLock";
 import HomeView from "./views/HomeView";
 import LibraryView from "./views/LibraryView";
@@ -16,6 +16,7 @@ export default function App() {
   const [settings, setSettings] = useState(DEFAULT_SETTINGS);
   const [circuit, setCircuit] = useState([]);
   const [loaded, setLoaded] = useState(false);
+  const [resumeSession, setResumeSession] = useState(null);
 
   // ─── 저장/불러오기 ───
   useEffect(() => {
@@ -30,6 +31,20 @@ export default function App() {
       } catch (e) {
         // 저장 데이터 없음 — 기본값 사용
       }
+      // 진행 중이던 운동 세션 — 앱이 백그라운드에서 종료됐어도 이어서 할 수 있게
+      try {
+        const sess = await storage.get(SESSION_KEY);
+        if (sess && sess.value) {
+          const s = JSON.parse(sess.value);
+          const fresh = s.savedAt && Date.now() - s.savedAt < SESSION_MAX_AGE;
+          if (fresh && s.circuit?.length && s.phase && s.phase !== "idle" && s.phase !== "done") {
+            setCircuit(s.circuit);
+            setResumeSession(s);
+          } else {
+            storage.delete(SESSION_KEY);
+          }
+        }
+      } catch (e) {}
       setLoaded(true);
     })();
   }, []);
@@ -94,6 +109,15 @@ export default function App() {
   // ─── 타이머 ───
   const timer = useWorkoutTimer({ circuit, settings, rerollAt });
   useWakeLock(view === "timer" && timer.phase !== "idle" && timer.phase !== "done");
+
+  // 저장돼 있던 진행 세션을 타이머 화면(일시정지 상태)으로 복원
+  useEffect(() => {
+    if (!loaded || !resumeSession) return;
+    timer.restore(resumeSession);
+    setView("timer");
+    setResumeSession(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loaded, resumeSession]);
 
   const startWorkout = () => {
     if (!circuit.length) return;

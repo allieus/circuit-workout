@@ -1,6 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 
 import { beep, speakGuide, stopSpeech, prefetchClips } from "../audio";
+import { storage } from "../storage";
+
+// 진행 중 세션 저장 키 — iOS가 백그라운드의 PWA를 종료해도 복귀 시 이어서 할 수 있게
+export const SESSION_KEY = "circuit-session-v1";
+export const SESSION_MAX_AGE = 60 * 60 * 1000; // 1시간 지난 세션은 폐기
 
 // 타이머 상태 머신: phase ∈ idle | ready | work | rest | roundRest | done
 // 흐름: 준비(prep초) → [운동(work초) → 휴식(rest초)] × 동작 수 → 라운드 휴식(roundRest초) → ... → 완료
@@ -101,6 +106,47 @@ export function useWorkoutTimer({ circuit, settings, rerollAt }) {
     return () => clearInterval(t);
   }, [paused, phase]);
 
+  // 화면을 벗어나면(전화 수신·앱 전환) 자동 일시정지 — 복귀 후 "계속하기"로 재개.
+  // iOS는 백그라운드에서 JS를 얼리므로 어차피 멈춘다 — 상태를 명시적으로 맞춰두는 것.
+  useEffect(() => {
+    const onHide = () => {
+      if (document.visibilityState === "hidden" && phase !== "idle" && phase !== "done") setPaused(true);
+    };
+    document.addEventListener("visibilitychange", onHide);
+    return () => document.removeEventListener("visibilitychange", onHide);
+  }, [phase]);
+
+  // 진행 중 세션 저장 — 앱이 종료돼도 다음 실행에서 복원(App.jsx)
+  useEffect(() => {
+    if (phase === "idle" || phase === "done") {
+      storage.delete(SESSION_KEY);
+      return;
+    }
+    storage.set(
+      SESSION_KEY,
+      JSON.stringify({
+        phase,
+        roundIdx,
+        exIdx,
+        secondsLeft,
+        circuit,
+        startTime: startTimeRef.current,
+        savedAt: Date.now(),
+      })
+    );
+  }, [phase, roundIdx, exIdx, secondsLeft, circuit]);
+
+  // 저장된 세션 복원 — 일시정지 상태로 들어가 사용자가 "계속하기"로 재개
+  const restore = (saved) => {
+    setRoundIdx(saved.roundIdx);
+    setExIdx(saved.exIdx);
+    setPhase(saved.phase);
+    setSecondsLeft(Math.max(1, saved.secondsLeft)); // 0이면 복원 즉시 advance되는 것 방지
+    setPaused(true);
+    startTimeRef.current = saved.startTime || Date.now();
+    halfSpokenRef.current = false;
+  };
+
   // 초 변화에 반응: 비프, 절반 안내, 0이면 다음 단계
   useEffect(() => {
     if (phase === "done" || phase === "idle") return;
@@ -157,6 +203,7 @@ export function useWorkoutTimer({ circuit, settings, rerollAt }) {
     secondsLeft,
     paused,
     start,
+    restore,
     stop,
     skip,
     togglePause,

@@ -64,6 +64,8 @@ docs/
 - **자세 삽화** (`public/art/` + `ExerciseArt.jsx`): codex imagegen으로 사전 생성한 픽토그램. 스타일: 정사각형·주철색(#1E2126) 단색 배경·초크 화이트(#F2EFE9) 굵은 라인·전신 실루엣·디테일/텍스트 없음. 타이머(준비/운동/휴식)와 서고 목록에 표시. 사용자 추가 동작(id가 "u"로 시작)은 삽화 없음 — artUrl이 null 반환.
 - **참고 영상**: 동작별 유튜브 검색 링크(ytUrl — "동작이름 자세" 검색). 홈 카드 ▶ 버튼, 서고 "▶ 영상" 링크.
 - **저장** (`storage.js`): 단일 키 `circuit-app-v1`에 `{exercises, settings}` JSON 통합 저장. 키를 쪼개지 말 것.
+- **세션 복원** (`useWorkoutTimer.js` + `App.jsx`): iOS는 백그라운드의 PWA를 수시로 종료 → 진행 중 세션을 `circuit-session-v1`에 매초 저장(phase/roundIdx/exIdx/secondsLeft/circuit/savedAt). 앱 재실행 시 1시간 이내 세션이면 타이머 화면을 **일시정지 상태로 복원**해 "계속하기"로 재개. idle/done 진입 시 삭제. 화면 이탈(visibilitychange hidden) 시 자동 일시정지.
+- **스플래시**: iOS만 기기 해상도별 PNG 필요(`public/splash/`, index.html의 apple-touch-startup-image 17종 — iPhone 12종+iPad 5종). Android·폴드·플립은 manifest(background_color+아이콘+이름)로 자동 생성. 원화는 케틀벨 스윙 그림자(codex imagegen, 솔리드 실루엣) — 재생성 시 스크래치 스크립트로 합성.
 - **PWA** (`vite.config.js`): vite-plugin-pwa `autoUpdate`. manifest는 standalone·portrait·ko. 음성 클립까지 프리캐시(globPatterns), 구글 폰트는 workbox runtimeCaching으로 첫 로드 후 오프라인 유지. SW·manifest가 동작하려면 HTTPS 배포 필요(로컬 dev는 예외). 배포: Vercel `circuit-workout` 프로젝트, 프로덕션 https://circuit-workout-two.vercel.app
 - **Wake Lock** (`hooks/useWakeLock.js`): 타이머 진행 중(phase가 idle/done이 아닐 때)만 활성. 화면을 다녀오면 자동 해제되므로 visibilitychange에서 재획득.
 
