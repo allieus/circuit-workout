@@ -15,6 +15,12 @@ export const SERIES = [
     desc: "팀 점심 메뉴 룰렛 — 최근 간 곳은 빼고",
     url: "https://itda-demo-lunch-pick.vercel.app",
   },
+  {
+    id: "fix-guide",
+    name: "고장 길잡이",
+    desc: "현장 AS 이슈 대응 가이드 — 오프라인 동작",
+    url: "https://itda-demo-fix-guide.vercel.app",
+  },
 ];
 
 export const REPO_URL = "https://github.com/allieus/circuit-workout";
