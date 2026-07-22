@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+
+Sitemap: https://circuit-workout-two.vercel.app/sitemap.xml
