@@ -21,6 +21,12 @@ export const SERIES = [
     desc: "현장 AS 이슈 대응 가이드 — 오프라인 동작",
     url: "https://itda-demo-fix-guide.vercel.app",
   },
+  {
+    id: "ondevice-ai",
+    name: "온디바이스 AI",
+    desc: "내 기기에서 쓸 수 있는 AI 탐지·검증",
+    url: "https://itda-demo-ondevice-ai.vercel.app",
+  },
 ];
 
 export const REPO_URL = "https://github.com/allieus/circuit-workout";
