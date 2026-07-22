@@ -33,6 +33,12 @@ export const SERIES = [
     desc: "영수증 사진 드래그 → 분류·집계·CSV",
     url: "https://itda-demo-receipt-box.vercel.app",
   },
+  {
+    id: "dashboard-drop",
+    name: "대시보드 드롭",
+    desc: "CSV를 끌어놓으면 즉석 대시보드",
+    url: "https://itda-demo-dashboard-drop.vercel.app",
+  },
 ];
 
 export const REPO_URL = "https://github.com/allieus/circuit-workout";
