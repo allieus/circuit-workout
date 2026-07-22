@@ -33,6 +33,7 @@ body {
   font-family: var(--font-body);
   color: var(--text);
   overscroll-behavior-y: none; /* standalone에서 바운스 스크롤 방지 */
+  transition: background 0.4s; /* 타이머가 body 배경을 페이즈 색으로 동기화할 때 부드럽게 */
 }
 
 button {
@@ -575,6 +576,15 @@ button {
   box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.25);
 }
 
+/* 휴식 중 다음 동작 예고 — 진행(채운 점)과 구분되는 빈 점 */
+.timer-step--next {
+  opacity: 0.95;
+  background: transparent;
+  border: 2px solid #fff;
+  box-sizing: border-box;
+  transform: scale(1.25);
+}
+
 .timer-steps-label {
   font-size: 12.5px;
   opacity: 0.7;
@@ -688,6 +698,41 @@ button {
   height: 100%;
   background: rgba(255, 255, 255, 0.85);
   transition: width 1s linear;
+}
+
+/* 전체 서킷 라인업 (타이머 중앙 하단) */
+.timer-lineup {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 22px;
+}
+
+.timer-lineup-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 13.5px;
+  opacity: 0.75;
+}
+
+.timer-lineup-item--done {
+  opacity: 0.35;
+  text-decoration: line-through;
+}
+
+.timer-lineup-item--cur {
+  opacity: 1;
+  font-weight: 700;
+  font-size: 15px;
+}
+
+/* 세로가 짧은 화면(SE·가로 모드)에서는 라인업을 숨겨 큰 숫자 우선 */
+@media (max-height: 640px) {
+  .timer-lineup {
+    display: none;
+  }
 }
 
 .timer-controls {

@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 import { PATTERNS, patternOf } from "../data/defaults";
 import ExerciseArt from "../components/ExerciseArt";
 
@@ -15,6 +17,14 @@ export default function TimerView({ circuit, settings, updateSetting, timer, sto
   // 라운드 내 진행 위치 — 휴식 중에는 다음 동작이 진행 대상
   const activeIdx = phase === "rest" ? exIdx + 1 : exIdx;
   const showSteps = phase === "ready" || phase === "work" || phase === "rest";
+
+  // 넓은 화면에서 컬럼 밖 여백도 페이즈 색으로 채운다 (언마운트 시 원복)
+  useEffect(() => {
+    document.body.style.background = bg;
+    return () => {
+      document.body.style.background = "";
+    };
+  }, [bg]);
 
   return (
     <div className="app app--timer" style={{ background: bg }}>
@@ -35,16 +45,26 @@ export default function TimerView({ circuit, settings, updateSetting, timer, sto
         </div>
         {showSteps && (
           <div className="timer-steps">
-            {circuit.map((e, i) => (
-              <span
-                key={e.id + i}
-                className={`timer-step ${
-                  i < activeIdx ? "timer-step--done" : i === activeIdx ? "timer-step--active" : ""
-                }`}
-              />
-            ))}
+            {circuit.map((e, i) => {
+              // 휴식 중에는 다음 동작을 "예고"(빈 점)로 구분 — 진행(채운 점)과 헷갈리지 않게
+              const cls =
+                phase === "rest"
+                  ? i <= exIdx
+                    ? "timer-step--done"
+                    : i === exIdx + 1
+                    ? "timer-step--next"
+                    : ""
+                  : i < exIdx
+                  ? "timer-step--done"
+                  : i === exIdx
+                  ? "timer-step--active"
+                  : "";
+              return <span key={e.id + i} className={`timer-step ${cls}`} />;
+            })}
             <span className="timer-steps-label">
-              동작 {Math.min(activeIdx + 1, circuit.length)} / {circuit.length}
+              {phase === "rest"
+                ? `다음 동작 ${Math.min(exIdx + 2, circuit.length)} / ${circuit.length}`
+                : `동작 ${exIdx + 1} / ${circuit.length}`}
             </span>
           </div>
         )}
@@ -109,6 +129,21 @@ export default function TimerView({ circuit, settings, updateSetting, timer, sto
           {/* 진행 바 */}
           <div className="progress">
             <div className="progress-fill" style={{ width: `${progress * 100}%` }} />
+          </div>
+
+          {/* 전체 서킷 라인업 — 지나온·현재·남은 동작을 한눈에 */}
+          <div className="timer-lineup">
+            {circuit.map((e, i) => {
+              const ep = patternOf(e);
+              const cls =
+                i < activeIdx ? "timer-lineup-item--done" : i === activeIdx ? "timer-lineup-item--cur" : "";
+              return (
+                <div key={e.id + i} className={`timer-lineup-item ${cls}`}>
+                  <span className="dot" style={{ background: ep.color }} />
+                  <span>{e.name}</span>
+                </div>
+              );
+            })}
           </div>
         </div>
       )}
