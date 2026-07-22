@@ -13,7 +13,7 @@ export const SERIES = [
     id: "lunch-pick",
     name: "점심 뽑기",
     desc: "팀 점심 메뉴 룰렛 — 최근 간 곳은 빼고",
-    url: "https://demo-lunch-pick.vercel.app",
+    url: "https://itda-demo-lunch-pick.vercel.app",
   },
 ];
 
