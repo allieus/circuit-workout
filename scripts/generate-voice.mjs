@@ -8,7 +8,7 @@
 
 import { createHash } from "node:crypto";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
-import { DEFAULT_EXERCISES } from "../src/data/defaults.js";
+import { DEFAULT_EXERCISES, KIDS_EXERCISES } from "../src/data/defaults.js";
 
 const API_KEY = process.env.ELEVENLABS_API_KEY;
 if (!API_KEY) {
@@ -33,7 +33,8 @@ const clips = {
 // 라운드 상한 30 (10초/50초 프리셋의 세트 수 확장 대비)
 for (let n = 1; n <= 29; n++) clips[`roundrest_${n}`] = `${n}라운드 완료. 잠시 쉬세요.`;
 for (let n = 2; n <= 30; n++) clips[`roundstart_${n}`] = `${n}라운드 시작!`;
-for (const ex of DEFAULT_EXERCISES) clips[`ex_${ex.id}`] = ex.memo ? `${ex.name}. ${ex.memo}` : `${ex.name}.`;
+for (const ex of [...DEFAULT_EXERCISES, ...KIDS_EXERCISES])
+  clips[`ex_${ex.id}`] = ex.memo ? `${ex.name}. ${ex.memo}` : `${ex.name}.`;
 
 // ─── 생성 ───
 await mkdir(OUT_DIR, { recursive: true });

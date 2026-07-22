@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { PATTERNS, PRESETS, DEFAULT_EXERCISES, DEFAULT_SETTINGS } from "./data/defaults";
+import { PATTERNS, PRESETS, DEFAULT_EXERCISES, DEFAULT_SETTINGS, KIDS_EXERCISES } from "./data/defaults";
 import { storage } from "./storage";
 import { useWorkoutTimer, SESSION_KEY, SESSION_MAX_AGE } from "./hooks/useWorkoutTimer";
 import { useWakeLock } from "./hooks/useWakeLock";
@@ -92,9 +92,12 @@ export default function App() {
   };
 
   // ─── 프로그램 프리셋 ───
-  // 서고에서 지운 기본 동작도 프리셋에서는 쓸 수 있게 DEFAULT_EXERCISES까지 조회
+  // 서고에서 지운 기본 동작(DEFAULT_EXERCISES)과 어린이 전용 동작(KIDS_EXERCISES)까지 조회
   const applyPreset = (preset) => {
-    const find = (id) => exercises.find((e) => e.id === id) || DEFAULT_EXERCISES.find((e) => e.id === id);
+    const find = (id) =>
+      exercises.find((e) => e.id === id) ||
+      DEFAULT_EXERCISES.find((e) => e.id === id) ||
+      KIDS_EXERCISES.find((e) => e.id === id);
     const circ = preset.exerciseIds.map(find).filter(Boolean);
     if (!circ.length) return;
     const next = { ...settings, ...preset.settings };

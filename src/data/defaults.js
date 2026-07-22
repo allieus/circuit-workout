@@ -24,7 +24,18 @@ export const artUrl = (ex) => (ex.id.startsWith("u") ? null : `/art/ex_${ex.id}.
 // 자세 참고 영상: 유튜브 검색 링크
 export const ytUrl = (ex) => "https://www.youtube.com/results?search_query=" + encodeURIComponent(`${ex.name} 자세`);
 
-// ─── 프로그램 프리셋 (docs/케틀벨-7가지.md의 프로그램) ───
+// ─── 어린이 코스 전용 동작 ───
+// 서고·랜덤 뽑기 풀에는 넣지 않는다 — 프리셋에서만 사용 (어른 서킷에 섞이지 않게).
+// 아령(2kg) 동작은 1개만 — 나머지는 아주 쉬운 맨몸. 프리셋의 exerciseIds는
+// App에서 서고 → DEFAULT_EXERCISES → KIDS_EXERCISES 순으로 해석된다.
+export const KIDS_EXERCISES = [
+  { id: "c1", pattern: "lower", name: "개구리 점프", memo: "쪼그려 앉았다가 개구리처럼 폴짝 뛰기" },
+  { id: "c2", pattern: "core", name: "곰 걸음", memo: "손과 발로 엉금엉금 네 발 걷기" },
+  { id: "c3", pattern: "push", name: "무릎 푸시업", memo: "무릎을 바닥에 대고 살짝만 내려갔다 올라오기" },
+  { id: "c4", pattern: "push", name: "아령 만세", memo: "아령을 두 손에 들고 만세하듯 천천히 위로" },
+];
+
+// ─── 프로그램 프리셋 (docs/케틀벨-7가지.md의 프로그램 + 어린이 코스) ───
 // 프리셋 = 고정 순서 서킷 + 권장 타이머 설정. 적용 후 설정은 자유롭게 조정 가능.
 export const PRESETS = [
   {
@@ -47,6 +58,13 @@ export const PRESETS = [
     desc: "한팔 스윙 → 스내치 → 클린 → 프레스 → 스쿼트 → 겟업 연결. 고강도 — 7동작 숙련 후에만",
     exerciseIds: ["k2", "k6", "k3", "k4", "k5", "k7"],
     settings: { rounds: 3, work: 30, rest: 10, roundRest: 90 },
+  },
+  {
+    id: "kids",
+    name: "어린이",
+    desc: "7살도 할 수 있는 아주 쉬운 코스 — 맨몸 위주에 가벼운 아령 마무리 한 가지. 재미있게, 무리 없이",
+    exerciseIds: ["d17", "c1", "c3", "d9", "c2", "c4"],
+    settings: { rounds: 2, work: 20, rest: 20, roundRest: 60 },
   },
 ];
 
