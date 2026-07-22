@@ -177,6 +177,13 @@ export default function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loaded, resumeSession]);
 
+  // 첫 진입 시 서킷을 미리 한 번 뽑아둔다 — 빈 화면 대신 기능이 바로 보이게
+  useEffect(() => {
+    if (!loaded || resumeSession || circuit.length) return;
+    generate();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loaded]);
+
   const startWorkout = () => {
     if (!circuit.length) return;
     timer.start();
