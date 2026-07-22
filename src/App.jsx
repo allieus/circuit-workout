@@ -16,6 +16,7 @@ import HomeView from "./views/HomeView";
 import LibraryView from "./views/LibraryView";
 import TimerView from "./views/TimerView";
 import HistoryView from "./views/HistoryView";
+import ContactView from "./views/ContactView";
 
 const STORAGE_KEY = "circuit-app-v1";
 
@@ -218,6 +219,10 @@ export default function App() {
 
   if (view === "history") {
     return <HistoryView view={view} setView={setView} history={history} removeRecord={removeRecord} />;
+  }
+
+  if (view === "contact") {
+    return <ContactView view={view} setView={setView} />;
   }
 
   if (view === "library") {

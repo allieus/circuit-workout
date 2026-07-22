@@ -434,6 +434,43 @@ button {
   cursor: default;
 }
 
+/* ─── 문의 ─── */
+.contact-desc {
+  font-size: 13.5px;
+  opacity: 0.65;
+  line-height: 1.6;
+  margin-bottom: 12px;
+}
+
+.input--textarea {
+  resize: vertical;
+  min-height: 120px;
+  line-height: 1.6;
+}
+
+.contact-hp {
+  /* 허니팟 — 화면에서 숨김 (봇만 채운다) */
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.contact-result {
+  margin-top: 10px;
+  font-size: 13.5px;
+  font-weight: 700;
+}
+
+.contact-result--ok {
+  color: #57a867;
+}
+
+.contact-result--err {
+  color: var(--accent);
+}
+
 .pattern-group {
   margin-bottom: 18px;
 }
