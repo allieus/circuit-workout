@@ -101,28 +101,38 @@ export default function TimerView({ circuit, settings, updateSetting, timer, sto
           {phase === "ready" && cur && (
             <>
               <div className="timer-hint">첫 동작</div>
-              <ExerciseArt ex={cur} className="timer-art" />
-              <div className="display timer-exname" style={{ color: p.color }}>
-                {cur.name}
+              <div className="timer-exrow">
+                <ExerciseArt ex={cur} className="timer-art" />
+                <div className="timer-extext">
+                  <div className="display timer-exname" style={{ color: p.color }}>
+                    {cur.name}
+                  </div>
+                  {cur.memo && <div className="timer-memo">{cur.memo}</div>}
+                </div>
               </div>
-              {cur.memo && <div className="timer-memo">{cur.memo}</div>}
             </>
           )}
           {isWork && cur && (
-            <>
-              <ExerciseArt ex={cur} className="timer-art timer-art--work" />
-              <div className="display timer-exname">{cur.name}</div>
-              {cur.memo && <div className="timer-memo timer-memo--work">{cur.memo}</div>}
-            </>
+            <div className="timer-exrow">
+              <ExerciseArt ex={cur} className="timer-art" />
+              <div className="timer-extext">
+                <div className="display timer-exname">{cur.name}</div>
+                {cur.memo && <div className="timer-memo timer-memo--work">{cur.memo}</div>}
+              </div>
+            </div>
           )}
           {phase === "rest" && nextEx && (
             <>
               <div className="timer-hint">다음 동작</div>
-              <ExerciseArt ex={nextEx} className="timer-art" />
-              <div className="display timer-exname" style={{ color: patternOf(nextEx).color }}>
-                {nextEx.name}
+              <div className="timer-exrow">
+                <ExerciseArt ex={nextEx} className="timer-art" />
+                <div className="timer-extext">
+                  <div className="display timer-exname" style={{ color: patternOf(nextEx).color }}>
+                    {nextEx.name}
+                  </div>
+                  {nextEx.memo && <div className="timer-memo">{nextEx.memo}</div>}
+                </div>
               </div>
-              {nextEx.memo && <div className="timer-memo">{nextEx.memo}</div>}
             </>
           )}
 

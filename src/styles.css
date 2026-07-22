@@ -630,18 +630,38 @@ button {
   line-height: 1.2;
 }
 
+/* 삽화 + 설명 가로 배치 — 좌우 여백을 쓰고 세로를 아끼는 레이아웃 */
+.timer-exrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 16px;
+}
+
 /* 자세 삽화 — 작은 화면에서 하단 컨트롤을 밀어내지 않게 vh로 상한 */
 .timer-art {
   display: block;
-  width: min(148px, 19vh);
-  height: min(148px, 19vh);
-  margin: 12px auto 8px;
-  border-radius: 18px;
+  width: min(120px, 16vh);
+  height: min(120px, 16vh);
+  flex-shrink: 0;
+  border-radius: 16px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
 }
 
-.timer-art--work {
-  margin-top: 18px;
+.timer-extext {
+  text-align: left;
+  min-width: 0;
+  max-width: 230px;
+}
+
+.timer-exrow .timer-exname {
+  font-size: 29px;
+}
+
+.timer-exrow .timer-memo {
+  margin-top: 6px;
+  font-size: 14px;
 }
 
 .timer-memo {
