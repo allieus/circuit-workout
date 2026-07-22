@@ -28,7 +28,7 @@ export default defineConfig({
       workbox: {
         // 음성 클립(voice/*)과 자세 삽화(art/*)까지 프리캐시 — 오프라인에서도 동작
         globPatterns: ["**/*.{js,css,html,svg,png,webmanifest}", "voice/*.{mp3,json}", "art/*.webp"],
-        globIgnores: ["splash/**"], // iOS가 설치 시점에 가져가는 파일 — 오프라인 캐시 불필요
+        globIgnores: ["splash/**", "og.png"], // iOS 설치용·공유 크롤러용 파일 — 오프라인 캐시 불필요
         // 구글 폰트는 첫 온라인 로드 때 캐시해 이후 오프라인에서도 유지
         runtimeCaching: [
           {
