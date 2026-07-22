@@ -27,6 +27,12 @@ export const SERIES = [
     desc: "내 기기에서 쓸 수 있는 AI 탐지·검증",
     url: "https://itda-demo-ondevice-ai.vercel.app",
   },
+  {
+    id: "receipt-box",
+    name: "영수증 정리함",
+    desc: "영수증 사진 드래그 → 분류·집계·CSV",
+    url: "https://itda-demo-receipt-box.vercel.app",
+  },
 ];
 
 export const REPO_URL = "https://github.com/allieus/circuit-workout";
