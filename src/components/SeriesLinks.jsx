@@ -20,6 +20,10 @@ export default function SeriesLinks() {
       <a className="series-repo" href={REPO_URL} target="_blank" rel="noreferrer">
         이 앱, 코딩 없이 만들었어요 — 만드는 법 보기 ↗
       </a>
+      <div className="series-edu">
+        이 데모는 <a href="https://itda.work" target="_blank" rel="noreferrer">잇다</a>의 기업·팀 AI 활용 교육 예시입니다 — 교육 문의{" "}
+        <a href="mailto:dev@itda.work">dev@itda.work</a>
+      </div>
     </div>
   );
 }

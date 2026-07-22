@@ -996,3 +996,15 @@ button {
   text-decoration: none;
   padding: 6px;
 }
+
+.series-edu {
+  text-align: center;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.7;
+  padding: 2px 6px 6px;
+}
+
+.series-edu a {
+  color: var(--text-dim);
+}
