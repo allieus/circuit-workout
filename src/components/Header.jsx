@@ -11,6 +11,9 @@ export default function Header({ view, setView }) {
         <button className={`btn tab ${view === "library" ? "tab--active" : ""}`} onClick={() => setView("library")}>
           동작 서고
         </button>
+        <button className={`btn tab ${view === "history" ? "tab--active" : ""}`} onClick={() => setView("history")}>
+          기록
+        </button>
       </nav>
     </div>
   );

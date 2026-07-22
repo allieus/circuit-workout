@@ -4,9 +4,11 @@ import { PATTERNS, PRESETS, DEFAULT_EXERCISES, DEFAULT_SETTINGS } from "./data/d
 import { storage } from "./storage";
 import { useWorkoutTimer, SESSION_KEY, SESSION_MAX_AGE } from "./hooks/useWorkoutTimer";
 import { useWakeLock } from "./hooks/useWakeLock";
+import { HISTORY_KEY, HISTORY_LIMIT, calcStreak } from "./history";
 import HomeView from "./views/HomeView";
 import LibraryView from "./views/LibraryView";
 import TimerView from "./views/TimerView";
+import HistoryView from "./views/HistoryView";
 
 const STORAGE_KEY = "circuit-app-v1";
 
@@ -18,6 +20,7 @@ export default function App() {
   const [loaded, setLoaded] = useState(false);
   const [resumeSession, setResumeSession] = useState(null);
   const [activePreset, setActivePreset] = useState(null); // 프리셋 id | null — 랜덤 뽑기로 돌아가면 해제
+  const [history, setHistory] = useState([]); // 완료 기록 (최신순)
 
   // ─── 저장/불러오기 ───
   useEffect(() => {
@@ -32,6 +35,11 @@ export default function App() {
       } catch (e) {
         // 저장 데이터 없음 — 기본값 사용
       }
+      // 완료 기록
+      try {
+        const rec = await storage.get(HISTORY_KEY);
+        if (rec && rec.value) setHistory(JSON.parse(rec.value));
+      } catch (e) {}
       // 진행 중이던 운동 세션 — 앱이 백그라운드에서 종료됐어도 이어서 할 수 있게
       try {
         const sess = await storage.get(SESSION_KEY);
@@ -125,8 +133,29 @@ export default function App() {
     persist(exercises, next);
   };
 
+  // ─── 완료 기록 ───
+  const persistHistory = (next) => {
+    setHistory(next);
+    storage.set(HISTORY_KEY, JSON.stringify(next));
+  };
+
+  const addRecord = ({ elapsedMin }) => {
+    const rec = {
+      id: "r" + Date.now(),
+      endedAt: Date.now(),
+      durationMin: elapsedMin,
+      rounds: settings.rounds,
+      work: settings.work,
+      preset: activePreset,
+      exercises: circuit.map((e) => ({ id: e.id, name: e.name })),
+    };
+    persistHistory([rec, ...history].slice(0, HISTORY_LIMIT));
+  };
+
+  const removeRecord = (id) => persistHistory(history.filter((r) => r.id !== id));
+
   // ─── 타이머 ───
-  const timer = useWorkoutTimer({ circuit, settings, rerollAt });
+  const timer = useWorkoutTimer({ circuit, settings, rerollAt, onComplete: addRecord });
   useWakeLock(view === "timer" && timer.phase !== "idle" && timer.phase !== "done");
 
   // 저장돼 있던 진행 세션을 타이머 화면(일시정지 상태)으로 복원
@@ -165,8 +194,13 @@ export default function App() {
         updateSetting={updateSetting}
         timer={timer}
         stopWorkout={stopWorkout}
+        streak={calcStreak(history)}
       />
     );
+  }
+
+  if (view === "history") {
+    return <HistoryView view={view} setView={setView} history={history} removeRecord={removeRecord} />;
   }
 
   if (view === "library") {

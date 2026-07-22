@@ -25,7 +25,8 @@ npm run voice      # ElevenLabs 음성 클립 재생성 — .env의 ELEVENLABS_A
 ```
 src/
   main.jsx                 # 엔트리 — SW 등록(virtual:pwa-register) + 음성 매니페스트 로드
-  App.jsx                  # 상태 소유(운동 서고·설정·서킷) + 화면 전환(home/library/timer)
+  App.jsx                  # 상태 소유(운동 서고·설정·서킷·기록) + 화면 전환(home/library/history/timer)
+  history.js               # 완료 기록 유틸 — HISTORY_KEY, 연속 일수(calcStreak), 주간 횟수
   styles.css               # 전체 스타일 — 디자인 토큰(CSS 변수) + 클래스. 동적 색만 인라인
   audio.js                 # beep(Web Audio) + 음성 클립 플레이어(speakGuide) + Web Speech 폴백
   storage.js               # 스토리지 어댑터 — localStorage 구현, 아티팩트의 window.storage 인터페이스 유지
@@ -37,6 +38,7 @@ src/
     HomeView.jsx           # 설정 스테퍼 + 서킷 뽑기/교체 + 시작
     LibraryView.jsx        # 동작 추가 폼(로컬 상태) + 패턴별 목록
     TimerView.jsx          # 타이머 표시 전용 (로직은 useWorkoutTimer)
+    HistoryView.jsx        # 완료 기록 목록 + 스트릭·주간·전체 통계
   components/
     Header.jsx             # 로고 + home/library 탭
     SettingStepper.jsx     # −/+ 스테퍼
@@ -66,6 +68,7 @@ docs/
 - **자세 삽화** (`public/art/` + `ExerciseArt.jsx`): codex imagegen으로 사전 생성한 픽토그램. 스타일: 정사각형·주철색(#1E2126) 단색 배경·초크 화이트(#F2EFE9) 굵은 라인·전신 실루엣·디테일/텍스트 없음. 타이머(준비/운동/휴식)와 서고 목록에 표시. 사용자 추가 동작(id가 "u"로 시작)은 삽화 없음 — artUrl이 null 반환.
 - **참고 영상**: 동작별 유튜브 검색 링크(ytUrl — "동작이름 자세" 검색). 홈 카드 ▶ 버튼, 서고 "▶ 영상" 링크.
 - **저장** (`storage.js`): 단일 키 `circuit-app-v1`에 `{exercises, settings}` JSON 통합 저장. 키를 쪼개지 말 것.
+- **완료 기록** (`history.js` + `HistoryView.jsx`): done 도달 시 useWorkoutTimer의 onComplete → App.addRecord가 `circuit-history-v1`에 저장(최신순, 상한 500). 연속 일수는 로컬 날짜(YYYY-MM-DD) 기준 — 오늘 안 했으면 어제까지의 연속을 유지해서 표시. 완료 화면에 "🔥 N일 연속", 기록 탭에 스트릭·이번 주(월요일 시작)·전체 통계. 중도 종료는 기록하지 않음.
 - **세션 복원** (`useWorkoutTimer.js` + `App.jsx`): iOS는 백그라운드의 PWA를 수시로 종료 → 진행 중 세션을 `circuit-session-v1`에 매초 저장(phase/roundIdx/exIdx/secondsLeft/circuit/savedAt). 앱 재실행 시 1시간 이내 세션이면 타이머 화면을 **일시정지 상태로 복원**해 "계속하기"로 재개. idle/done 진입 시 삭제. 화면 이탈(visibilitychange hidden) 시 자동 일시정지.
 - **스플래시**: iOS만 기기 해상도별 PNG 필요(`public/splash/`, index.html의 apple-touch-startup-image 17종 — iPhone 12종+iPad 5종). Android·폴드·플립은 manifest(background_color+아이콘+이름)로 자동 생성. 원화는 케틀벨 스윙 그림자(codex imagegen, 솔리드 실루엣) — 재생성 시 스크래치 스크립트로 합성.
 - **PWA** (`vite.config.js`): vite-plugin-pwa `autoUpdate`. manifest는 standalone·portrait·ko. 음성 클립까지 프리캐시(globPatterns), 구글 폰트는 workbox runtimeCaching으로 첫 로드 후 오프라인 유지. SW·manifest가 동작하려면 HTTPS 배포 필요(로컬 dev는 예외). 배포: Vercel `circuit-workout` 프로젝트, 프로덕션 https://circuit-workout-two.vercel.app
@@ -84,7 +87,7 @@ docs/
 
 - [x] PWA화(오프라인 + 홈 화면 추가) — v0.3 완료
 - [x] 화면 꺼짐 방지 (Wake Lock API) — v0.3 완료
-- [ ] 운동 기록: 완료한 서킷 히스토리 저장, 주간 통계
+- [x] 운동 기록: 완료한 서킷 히스토리 저장, 스트릭·주간 통계 — v0.3 완료
 - [ ] 동작에 참고 영상 URL 필드 추가 (영상 보고 배운 동작 원본 링크 보관)
 - [ ] 서킷 프리셋 저장/공유 (JSON 내보내기) — 케틀벨-7가지.md의 프로그램(10초/50초, 무빙 타겟, 딥식스) 프리셋 후보
 - [ ] 케틀벨 무게 기록 필드

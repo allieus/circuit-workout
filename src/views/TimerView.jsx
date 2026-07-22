@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { PATTERNS, patternOf } from "../data/defaults";
 import ExerciseArt from "../components/ExerciseArt";
 
-export default function TimerView({ circuit, settings, updateSetting, timer, stopWorkout }) {
+export default function TimerView({ circuit, settings, updateSetting, timer, stopWorkout, streak }) {
   const { phase, roundIdx, exIdx, secondsLeft, paused } = timer;
   const cur = circuit[exIdx];
   const p = cur ? patternOf(cur) : PATTERNS[0];
@@ -77,6 +77,8 @@ export default function TimerView({ circuit, settings, updateSetting, timer, sto
           <div className="timer-done-sub">
             {settings.rounds}라운드 × {circuit.length}동작 · 약 {timer.elapsedMinutes()}분
           </div>
+          {streak > 0 && <div className="timer-streak">🔥 {streak}일 연속 운동 중</div>}
+          <div className="timer-done-note">기록 탭에 저장됐어요</div>
         </div>
       ) : phase === "roundRest" ? (
         <div className="timer-center">
