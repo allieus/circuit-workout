@@ -31,6 +31,7 @@ src/
   audio.js                 # beep(Web Audio) + 음성 클립 플레이어(speakGuide) + Web Speech 폴백
   storage.js               # 스토리지 어댑터 — localStorage 구현, 아티팩트의 window.storage 인터페이스 유지
   data/defaults.js         # PATTERNS(5패턴+색), MODES(운동 모드), DEFAULT_EXERCISES(기본 21동작+equip), DEFAULT_SETTINGS, artUrl/ytUrl
+  data/series.js           # 뽑기 시리즈 목록(SELF_ID·SERIES·REPO_URL) — 새 데모 앱 나오면 여기 추가
   hooks/
     useWorkoutTimer.js     # 타이머 상태 머신 전체 (advance 로직의 유일한 위치)
     useWakeLock.js         # 타이머 중 화면 꺼짐 방지 + visibilitychange 재획득
@@ -44,6 +45,7 @@ src/
     SettingStepper.jsx     # −/+ 스테퍼
     InstallHint.jsx        # 홈 화면 추가 안내 배너 (iOS/Android 브라우저 접속 시, 닫으면 localStorage 기억)
     ExerciseArt.jsx        # 자세 삽화 img — 없으면 onError로 숨김, key=ex.id로 교체 시 리셋
+    SeriesLinks.jsx        # 홈 하단 시리즈 링크 푸터 — 형제 데모 앱 추가 시 series.js와 함께 갱신(뽑기 시리즈 공통 규약)
 scripts/
   generate-voice.mjs       # ElevenLabs 클립 사전 생성 (npm run voice)
 public/                    # PWA 아이콘 (icon-192/512, maskable, apple-touch-icon, favicon.svg)

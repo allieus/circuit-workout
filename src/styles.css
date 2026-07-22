@@ -943,3 +943,56 @@ button {
   padding: 18px 0;
   font-size: 18px;
 }
+
+/* ─── 시리즈 링크 (홈 하단 푸터) ─── */
+.series {
+  margin-top: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.series-title {
+  font-size: 12.5px;
+  color: var(--muted);
+  text-align: center;
+  margin-bottom: 2px;
+}
+
+.series-item {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  background: var(--surface);
+  border-radius: 12px;
+  padding: 12px 14px;
+  text-decoration: none;
+  color: var(--text);
+}
+
+.series-item-name {
+  font-weight: 700;
+  font-size: 14.5px;
+  flex-shrink: 0;
+}
+
+.series-item-desc {
+  font-size: 12.5px;
+  color: var(--text-dim);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.series-item-arrow {
+  margin-left: auto;
+  color: var(--muted);
+}
+
+.series-repo {
+  text-align: center;
+  font-size: 12.5px;
+  color: var(--muted);
+  text-decoration: none;
+  padding: 6px;
+}

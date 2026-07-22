@@ -1,6 +1,7 @@
 import { MODES, patternOf, ytUrl } from "../data/defaults";
 import Header from "../components/Header";
 import InstallHint from "../components/InstallHint";
+import SeriesLinks from "../components/SeriesLinks";
 import SettingStepper from "../components/SettingStepper";
 
 export default function HomeView({
@@ -125,6 +126,8 @@ export default function HomeView({
       )}
 
       <div className="footnote">패턴 색상은 경기용 케틀벨 무게 색상 코드에서 따왔습니다</div>
+
+      <SeriesLinks />
     </div>
   );
 }
