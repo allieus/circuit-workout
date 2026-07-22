@@ -94,7 +94,8 @@ export default function TimerView({ circuit, settings, updateSetting, timer, sto
           })}
         </div>
       ) : (
-        <div className="timer-center">
+        <div className="timer-center timer-center--split">
+          <div className="timer-main">
           <div className="timer-label timer-label--phase">{phase === "ready" ? "준비" : isWork ? "운동" : "휴식"}</div>
           <div className="display timer-count">{secondsLeft}</div>
 
@@ -140,8 +141,9 @@ export default function TimerView({ circuit, settings, updateSetting, timer, sto
           <div className="progress">
             <div className="progress-fill" style={{ width: `${progress * 100}%` }} />
           </div>
+          </div>
 
-          {/* 전체 서킷 라인업 — 지나온·현재·남은 동작을 한눈에 */}
+          {/* 전체 서킷 라인업 — 좁은 화면에선 아래, 와이드 화면에선 오른쪽 사이드 */}
           <div className="timer-lineup">
             {circuit.map((e, i) => {
               const ep = patternOf(e);

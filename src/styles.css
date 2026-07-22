@@ -748,10 +748,59 @@ button {
   font-size: 15px;
 }
 
-/* 세로가 짧은 화면(SE·가로 모드)에서는 라인업을 숨겨 큰 숫자 우선 */
-@media (max-height: 640px) {
+/* 세로가 짧은 좁은 화면(SE·폰 가로)에서는 라인업을 숨겨 큰 숫자 우선 */
+@media (max-height: 640px) and (max-width: 899px) {
   .timer-lineup {
     display: none;
+  }
+}
+
+/* ─── 와이드 화면(데스크톱·태블릿 가로): 라인업을 오른쪽 사이드로 ─── */
+@media (min-width: 900px) {
+  .app--timer {
+    max-width: 1100px;
+  }
+
+  .timer-center--split {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 80px;
+  }
+
+  .timer-center--split .timer-main {
+    flex: 0 1 520px;
+  }
+
+  .timer-center--split .timer-lineup {
+    margin-top: 0;
+    gap: 10px;
+  }
+
+  .timer-center--split .timer-lineup-item {
+    justify-content: flex-start;
+    font-size: 17px;
+  }
+
+  .timer-center--split .timer-lineup-item--cur {
+    font-size: 20px;
+  }
+
+  .timer-center--split .timer-count {
+    font-size: 150px;
+  }
+
+  .timer-center--split .timer-art {
+    width: min(160px, 22vh);
+    height: min(160px, 22vh);
+  }
+
+  .timer-center--split .timer-exname {
+    font-size: 34px;
+  }
+
+  .timer-center--split .timer-memo {
+    font-size: 15px;
   }
 }
 
