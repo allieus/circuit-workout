@@ -1,4 +1,4 @@
-# 서킷 뽑기 (circuit-workout)
+# 홈트 뽑기 (circuit-workout)
 
 홈트용 서킷 운동 랜덤 생성기 + 음성 가이드 타이머 PWA. Claude.ai 아티팩트 → 로컬 개발 → v0.3에서 SPA 재구축(모듈 분리 + PWA화).
 

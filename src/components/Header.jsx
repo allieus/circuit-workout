@@ -8,7 +8,7 @@ export default function Header({ view, setView }) {
   return (
     <div className="header">
       <div className="display header-logo">
-        서킷 <span className="accent">뽑기</span>
+        홈트 <span className="accent">뽑기</span>
       </div>
       <nav className="header-tabs">
         {tabs.map((t) => (

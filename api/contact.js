@@ -19,7 +19,7 @@ export default async function handler(req, res) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       chat_id: chatId,
-      text: `📮 [서킷 뽑기 문의]\n\n${text}\n\n― 연락처: ${who || "미기재"}`,
+      text: `📮 [홈트 뽑기 문의]\n\n${text}\n\n― 연락처: ${who || "미기재"}`,
     }),
   });
   if (!r.ok) return res.status(502).json({ ok: false });

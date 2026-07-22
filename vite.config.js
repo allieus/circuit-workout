@@ -10,8 +10,8 @@ export default defineConfig({
       registerType: "autoUpdate",
       includeAssets: ["apple-touch-icon.png", "favicon.svg"],
       manifest: {
-        name: "서킷 뽑기",
-        short_name: "서킷 뽑기",
+        name: "홈트 뽑기",
+        short_name: "홈트 뽑기",
         description: "홈트 서킷 랜덤 생성기 + 음성 가이드 타이머",
         lang: "ko",
         display: "standalone",
