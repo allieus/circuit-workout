@@ -29,6 +29,9 @@ export default defineConfig({
         // 음성 클립(voice/*)과 자세 삽화(art/*)까지 프리캐시 — 오프라인에서도 동작
         globPatterns: ["**/*.{js,css,html,svg,png,webmanifest}", "voice/*.{mp3,json}", "art/*.webp"],
         globIgnores: ["splash/**", "og.png"], // iOS 설치용·공유 크롤러용 파일 — 오프라인 캐시 불필요
+        // 확장자 있는 경로는 SPA 폴백(index.html) 대상에서 제외 — 프리캐시에 없는
+        // 파일(splash/og 등)을 주소창으로 열 때 앱 화면이 뜨는 문제 방지
+        navigateFallbackDenylist: [/\.[a-z0-9]+$/i],
         // 구글 폰트는 첫 온라인 로드 때 캐시해 이후 오프라인에서도 유지
         runtimeCaching: [
           {
