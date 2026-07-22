@@ -16,6 +16,7 @@ export const MODES = [
   { id: "all", label: "전체" },
   { id: "kb", label: "케틀벨" },
   { id: "body", label: "맨몸" },
+  { id: "kids", label: "어린이" },
 ];
 
 // 사전 생성 삽화 — 기본 동작만 존재(사용자 추가 동작 id는 "u"로 시작)
@@ -24,18 +25,7 @@ export const artUrl = (ex) => (ex.id.startsWith("u") ? null : `/art/ex_${ex.id}.
 // 자세 참고 영상: 유튜브 검색 링크
 export const ytUrl = (ex) => "https://www.youtube.com/results?search_query=" + encodeURIComponent(`${ex.name} 자세`);
 
-// ─── 어린이 코스 전용 동작 ───
-// 서고·랜덤 뽑기 풀에는 넣지 않는다 — 프리셋에서만 사용 (어른 서킷에 섞이지 않게).
-// 아령(2kg) 동작은 1개만 — 나머지는 아주 쉬운 맨몸. 프리셋의 exerciseIds는
-// App에서 서고 → DEFAULT_EXERCISES → KIDS_EXERCISES 순으로 해석된다.
-export const KIDS_EXERCISES = [
-  { id: "c1", pattern: "lower", name: "개구리 점프", memo: "쪼그려 앉았다가 개구리처럼 폴짝 뛰기" },
-  { id: "c2", pattern: "core", name: "곰 걸음", memo: "손과 발로 엉금엉금 네 발 걷기" },
-  { id: "c3", pattern: "push", name: "무릎 푸시업", memo: "무릎을 바닥에 대고 살짝만 내려갔다 올라오기" },
-  { id: "c4", pattern: "push", name: "아령 만세", memo: "아령을 두 손에 들고 만세하듯 천천히 위로" },
-];
-
-// ─── 프로그램 프리셋 (docs/케틀벨-7가지.md의 프로그램 + 어린이 코스) ───
+// ─── 프로그램 프리셋 (docs/케틀벨-7가지.md의 프로그램) ───
 // 프리셋 = 고정 순서 서킷 + 권장 타이머 설정. 적용 후 설정은 자유롭게 조정 가능.
 export const PRESETS = [
   {
@@ -58,13 +48,6 @@ export const PRESETS = [
     desc: "한팔 스윙 → 스내치 → 클린 → 프레스 → 스쿼트 → 겟업 연결. 고강도 — 7동작 숙련 후에만",
     exerciseIds: ["k2", "k6", "k3", "k4", "k5", "k7"],
     settings: { rounds: 3, work: 30, rest: 10, roundRest: 90 },
-  },
-  {
-    id: "kids",
-    name: "어린이",
-    desc: "7살도 할 수 있는 아주 쉬운 코스 — 맨몸 위주에 가벼운 아령 마무리 한 가지. 재미있게, 무리 없이",
-    exerciseIds: ["d17", "c1", "c3", "d9", "c2", "c4"],
-    settings: { rounds: 2, work: 20, rest: 20, roundRest: 60 },
   },
 ];
 
@@ -100,6 +83,32 @@ export const DEFAULT_EXERCISES = [
   { id: "d15", equip: "body", pattern: "full", name: "버피", memo: "본인 페이스로" },
   { id: "d17", equip: "body", pattern: "full", name: "점핑잭", memo: "가볍게 리듬 타기" },
 ];
+
+// ─── 어린이 모드 전용 풀 ───
+// 7살도 할 수 있는 아주 쉬운 동작. 서고·어른 랜덤 풀과 분리 — "어린이" 모드에서만
+// 5패턴 랜덤 뽑기의 소스가 된다. 아령(2kg) 동작은 1개만, 나머지는 전부 맨몸.
+// 슈퍼맨·점핑잭은 기본 서고 동작을 그대로 재사용 (음성·삽화 공유).
+export const KIDS_EXERCISES = [
+  // 하체
+  { id: "c1", pattern: "lower", name: "개구리 점프", memo: "쪼그려 앉았다가 개구리처럼 폴짝 뛰기" },
+  { id: "c5", pattern: "lower", name: "아기 스쿼트", memo: "팔을 앞으로 뻗고 천천히 앉았다 일어나기" },
+  // 푸시
+  { id: "c3", pattern: "push", name: "무릎 푸시업", memo: "무릎을 바닥에 대고 살짝만 내려갔다 올라오기" },
+  { id: "c7", pattern: "push", name: "벽 푸시업", memo: "벽을 짚고 서서 팔을 굽혔다 펴기" },
+  { id: "c4", pattern: "push", name: "아령 만세", memo: "아령을 두 손에 들고 만세하듯 천천히 위로" },
+  // 풀
+  { id: "c8", pattern: "pull", name: "수영 슈퍼맨", memo: "엎드려서 수영하듯 팔다리를 첨벙첨벙" },
+  DEFAULT_EXERCISES.find((e) => e.id === "d9"), // 슈퍼맨
+  // 코어
+  { id: "c2", pattern: "core", name: "곰 걸음", memo: "손과 발로 엉금엉금 네 발 걷기" },
+  { id: "c9", pattern: "core", name: "게 걸음", memo: "배꼽은 하늘로, 손과 발로 옆으로 걷기" },
+  // 전신
+  { id: "c10", pattern: "full", name: "제자리 달리기", memo: "무릎을 높이 들며 신나게 제자리 뛰기" },
+  DEFAULT_EXERCISES.find((e) => e.id === "d17"), // 점핑잭
+];
+
+// 어린이 모드 진입 시 적용되는 권장 타이머 설정
+export const KIDS_SETTINGS = { rounds: 2, work: 20, rest: 20, roundRest: 60 };
 
 export const DEFAULT_SETTINGS = {
   rounds: 3, // 라운드 수

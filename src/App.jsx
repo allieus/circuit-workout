@@ -1,6 +1,13 @@
 import { useEffect, useState } from "react";
 
-import { PATTERNS, PRESETS, DEFAULT_EXERCISES, DEFAULT_SETTINGS, KIDS_EXERCISES } from "./data/defaults";
+import {
+  PATTERNS,
+  PRESETS,
+  DEFAULT_EXERCISES,
+  DEFAULT_SETTINGS,
+  KIDS_EXERCISES,
+  KIDS_SETTINGS,
+} from "./data/defaults";
 import { storage } from "./storage";
 import { useWorkoutTimer, SESSION_KEY, SESSION_MAX_AGE } from "./hooks/useWorkoutTimer";
 import { useWakeLock } from "./hooks/useWakeLock";
@@ -67,12 +74,14 @@ export default function App() {
   };
 
   // ─── 서킷 생성 ───
-  // 모드 필터에 맞는 동작이 패턴에 하나도 없으면 모드를 무시하고 패턴 전체에서 뽑는다
+  // 어린이 모드는 전용 풀(KIDS_EXERCISES)에서 뽑는다 — 어른 서고와 완전 분리.
+  // 그 외 모드 필터에 맞는 동작이 패턴에 하나도 없으면 모드를 무시하고 패턴 전체에서 뽑는다.
   const pickRandom = (patternId, excludeId, mode = settings.mode || "all") => {
-    const inMode = (e) => mode === "all" || e.equip === mode;
-    let pool = exercises.filter((e) => e.pattern === patternId && inMode(e) && e.id !== excludeId);
-    if (!pool.length) pool = exercises.filter((e) => e.pattern === patternId && inMode(e));
-    if (!pool.length) pool = exercises.filter((e) => e.pattern === patternId);
+    const source = mode === "kids" ? KIDS_EXERCISES : exercises;
+    const inMode = (e) => mode === "all" || mode === "kids" || e.equip === mode;
+    let pool = source.filter((e) => e.pattern === patternId && inMode(e) && e.id !== excludeId);
+    if (!pool.length) pool = source.filter((e) => e.pattern === patternId && inMode(e));
+    if (!pool.length) pool = source.filter((e) => e.pattern === patternId);
     return pool.length ? pool[Math.floor(Math.random() * pool.length)] : null;
   };
 
@@ -81,9 +90,10 @@ export default function App() {
     setCircuit(PATTERNS.map((p) => pickRandom(p.id)).filter(Boolean));
   };
 
-  // 모드 변경 — 이미 뽑아둔 서킷이 있으면 새 모드 기준으로 다시 뽑는다 (프리셋도 해제)
+  // 모드 변경 — 이미 뽑아둔 서킷이 있으면 새 모드 기준으로 다시 뽑는다.
+  // 어린이 모드 진입 시에는 권장 설정(짧은 운동·2라운드)도 함께 적용.
   const changeMode = (mode) => {
-    const next = { ...settings, mode };
+    const next = { ...settings, mode, ...(mode === "kids" ? KIDS_SETTINGS : {}) };
     setSettings(next);
     persist(exercises, next);
     if (circuit.length && !activePreset) {
@@ -92,12 +102,9 @@ export default function App() {
   };
 
   // ─── 프로그램 프리셋 ───
-  // 서고에서 지운 기본 동작(DEFAULT_EXERCISES)과 어린이 전용 동작(KIDS_EXERCISES)까지 조회
+  // 서고에서 지운 기본 동작도 프리셋에서는 쓸 수 있게 DEFAULT_EXERCISES까지 조회
   const applyPreset = (preset) => {
-    const find = (id) =>
-      exercises.find((e) => e.id === id) ||
-      DEFAULT_EXERCISES.find((e) => e.id === id) ||
-      KIDS_EXERCISES.find((e) => e.id === id);
+    const find = (id) => exercises.find((e) => e.id === id) || DEFAULT_EXERCISES.find((e) => e.id === id);
     const circ = preset.exerciseIds.map(find).filter(Boolean);
     if (!circ.length) return;
     const next = { ...settings, ...preset.settings };
