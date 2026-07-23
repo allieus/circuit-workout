@@ -63,25 +63,40 @@ export const DEFAULT_EXERCISES = [
   { id: "d1", equip: "kb", pattern: "lower", name: "고블릿 스쿼트", memo: "케틀벨 가슴 앞, 팔꿈치 무릎 안쪽" },
   { id: "d3", equip: "body", pattern: "lower", name: "교대 런지", memo: "무릎이 발끝 넘지 않게" },
   { id: "d4", equip: "kb", pattern: "lower", name: "케틀벨 데드리프트", memo: "허리 곧게, 시선 정면" },
+  { id: "d18", equip: "body", pattern: "lower", name: "맨몸 스쿼트", memo: "발은 어깨너비, 엉덩이를 뒤로 빼며 앉기" },
+  { id: "d19", equip: "body", pattern: "lower", name: "글루트 브리지", memo: "누워서 엉덩이를 들어 올려 꽉 조이기" },
+  { id: "d20", equip: "body", pattern: "lower", name: "카프 레이즈", memo: "발뒤꿈치를 천천히 들었다 내리기" },
   // 푸시
   { id: "k4", equip: "kb", pattern: "push", name: "케틀벨 프레스", memo: "클린 상태에서 수직으로 밀기, 전완 수직 유지" },
   { id: "d5", equip: "body", pattern: "push", name: "푸시업", memo: "몸통 일직선 유지" },
   { id: "d7", equip: "body", pattern: "push", name: "파이크 푸시업", memo: "어깨 타깃, 엉덩이 높게" },
+  { id: "d21", equip: "kb", pattern: "push", name: "케틀벨 플로어 프레스", memo: "누워서 팔꿈치가 바닥에 닿으면 다시 밀어 올리기" },
+  { id: "d22", equip: "kb", pattern: "push", name: "케틀벨 푸시 프레스", memo: "무릎 반동을 살려 머리 위로 밀어 올리기" },
+  { id: "d23", equip: "body", pattern: "push", name: "의자 딥스", memo: "의자를 뒤로 짚고 팔꿈치를 굽혔다 펴기" },
   // 풀
   { id: "d8", equip: "kb", pattern: "pull", name: "한팔 로우", memo: "케틀벨, 등으로 당기기" },
   { id: "d10", equip: "kb", pattern: "pull", name: "케틀벨 하이풀", memo: "이마 가까이, 팔꿈치 높게" },
   { id: "d9", equip: "body", pattern: "pull", name: "슈퍼맨", memo: "팔다리 동시에 들어올리기" },
+  { id: "d24", equip: "kb", pattern: "pull", name: "고릴라 로우", memo: "양발 사이 케틀벨을 번갈아 등으로 당기기" },
+  { id: "d25", equip: "body", pattern: "pull", name: "리버스 스노우 엔젤", memo: "엎드려서 팔을 눈밭 천사처럼 크게 돌리기" },
+  { id: "d26", equip: "body", pattern: "pull", name: "프론 더블유 레이즈", memo: "엎드려 팔꿈치를 등 뒤로 조여 더블유 만들기" },
   // 코어
   { id: "d11", equip: "body", pattern: "core", name: "플랭크", memo: "엉덩이 처지지 않게" },
   { id: "d12", equip: "kb", pattern: "core", name: "러시안 트위스트", memo: "케틀벨 들고 좌우 회전" },
   { id: "d13", equip: "body", pattern: "core", name: "데드버그", memo: "허리 바닥에 붙이기" },
   { id: "d14", equip: "body", pattern: "core", name: "마운틴 클라이머", memo: "빠르게, 코어 고정" },
+  { id: "d27", equip: "kb", pattern: "core", name: "케틀벨 헤일로", memo: "머리 둘레로 케틀벨을 천천히 돌리기" },
+  { id: "d28", equip: "kb", pattern: "core", name: "케틀벨 사이드 밴드", memo: "케틀벨을 한 손에 들고 옆구리를 접었다 펴기" },
+  { id: "d29", equip: "body", pattern: "core", name: "사이드 플랭크", memo: "옆으로 누워 몸통 일직선, 절반에 방향 바꾸기" },
+  { id: "d30", equip: "body", pattern: "core", name: "레그 레이즈", memo: "다리를 천천히 올렸다 바닥에 닿기 직전까지 내리기" },
   // 전신
   { id: "k3", equip: "kb", pattern: "full", name: "케틀벨 클린", memo: "턱에 어퍼컷 찌르듯, 손목 꺾이지 않게" },
   { id: "k6", equip: "kb", pattern: "full", name: "케틀벨 스내치", memo: "하이풀에서 손을 위로, 스윙보다 가벼운 무게로" },
   { id: "k7", equip: "kb", pattern: "full", name: "터키시 겟업", memo: "케틀벨에서 시선 떼지 말고, 순서대로 천천히" },
   { id: "d15", equip: "body", pattern: "full", name: "버피", memo: "본인 페이스로" },
   { id: "d17", equip: "body", pattern: "full", name: "점핑잭", memo: "가볍게 리듬 타기" },
+  { id: "d31", equip: "kb", pattern: "full", name: "케틀벨 스러스터", memo: "스쿼트로 앉았다 일어나며 머리 위로 밀기" },
+  { id: "d32", equip: "body", pattern: "full", name: "스케이터 점프", memo: "스케이트 타듯 좌우로 크게 점프" },
 ];
 
 // ─── 어린이 모드 전용 풀 ───

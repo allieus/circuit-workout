@@ -30,7 +30,7 @@ src/
   styles.css               # 전체 스타일 — 디자인 토큰(CSS 변수) + 클래스. 동적 색만 인라인
   audio.js                 # beep(Web Audio) + 음성 클립 플레이어(speakGuide) + Web Speech 폴백
   storage.js               # 스토리지 어댑터 — localStorage 구현, 아티팩트의 window.storage 인터페이스 유지
-  data/defaults.js         # PATTERNS(5패턴+색), MODES(운동 모드), DEFAULT_EXERCISES(기본 21동작+equip), DEFAULT_SETTINGS, artUrl/ytUrl
+  data/defaults.js         # PATTERNS(5패턴+색), MODES(운동 모드), DEFAULT_EXERCISES(기본 36동작+equip — 패턴×모드 조합마다 3개 이상 유지), DEFAULT_SETTINGS, artUrl/ytUrl
   data/series.js           # 뽑기 시리즈 목록(SELF_ID·SERIES·REPO_URL) — 새 데모 앱 나오면 여기 추가
   hooks/
     useWorkoutTimer.js     # 타이머 상태 머신 전체 (advance 로직의 유일한 위치)
@@ -49,8 +49,8 @@ src/
 scripts/
   generate-voice.mjs       # ElevenLabs 클립 사전 생성 (npm run voice)
 public/                    # PWA 아이콘 (icon-192/512, maskable, apple-touch-icon, favicon.svg)
-  voice/                   # 사전 생성된 음성 클립(mp3 42개) + manifest.json — 커밋 대상
-  art/                     # 사전 생성된 자세 삽화(webp 21개, 기본 동작 전용) — 커밋 대상
+  voice/                   # 사전 생성된 음성 클립 + manifest.json — 커밋 대상
+  art/                     # 사전 생성된 자세 삽화(webp, 기본 동작 전용) — 커밋 대상
 docs/
   기획.md                  # 타이머 5단계 흐름과 음성 가이드 스펙 (기능의 정본 문서)
   케틀벨-7가지.md          # 기본 동작의 근거 자료 + 프리셋 아이디어
@@ -81,7 +81,7 @@ docs/
 - **타이머 화면 표시** (`TimerView.jsx`): 상단 스텝 점(휴식 중엔 다음 동작을 **빈 점 + "다음 동작 n/N" 라벨**로 예고 — 진행과 구분) + 진행 바 아래 전체 서킷 라인업(완료 취소선·현재 강조, 세로 640px 미만에선 숨김). 휴식 화면의 큰 동작명은 다음 동작 예고임(기획.md "휴식=예습 시간") — 같은 동작이 연속 반복되는 버그 아님. 랜덤 서킷은 5슬롯=5패턴 각 1개라 인접 중복이 구조적으로 불가능(10초/50초 프리셋만 의도적 반복). body 배경을 페이즈 색으로 동기화해 넓은 화면에서도 여백 없이 채워진다. 900px 이상 와이드 화면에선 라인업이 오른쪽 사이드 컬럼으로 이동하고 숫자·삽화가 확대된다(timer-center--split).
 - **자세 삽화** (`public/art/` + `ExerciseArt.jsx`): codex imagegen으로 사전 생성한 픽토그램. 스타일: 정사각형·주철색(#1E2126) 단색 배경·초크 화이트(#F2EFE9) 굵은 라인·전신 실루엣·디테일/텍스트 없음. 타이머(준비/운동/휴식)와 서고 목록에 표시. 사용자 추가 동작(id가 "u"로 시작)은 삽화 없음 — artUrl이 null 반환.
 - **참고 영상**: 동작별 유튜브 검색 링크(ytUrl — "동작이름 자세" 검색). 홈 카드 ▶ 버튼, 서고 "▶ 영상" 링크.
-- **저장** (`storage.js`): 단일 키 `circuit-app-v1`에 `{exercises, settings}` JSON 통합 저장. 키를 쪼개지 말 것.
+- **저장** (`storage.js`): 단일 키 `circuit-app-v1`에 `{exercises, settings, removed}` JSON 통합 저장. 키를 쪼개지 말 것. `removed`는 사용자가 서고에서 지운 기본 동작 id 목록 — 로드 시 앱 업데이트로 늘어난 기본 동작을 저장된 서고에 병합하되(App.jsx), removed에 있는 동작은 되살리지 않는다. 덕분에 기본 동작을 늘리면 기존 사용자에게도 자동 반영된다.
 - **완료 기록** (`history.js` + `HistoryView.jsx`): done 도달 시 useWorkoutTimer의 onComplete → App.addRecord가 `circuit-history-v1`에 저장(최신순, 상한 500). 연속 일수는 로컬 날짜(YYYY-MM-DD) 기준 — 오늘 안 했으면 어제까지의 연속을 유지해서 표시. 완료 화면에 "🔥 N일 연속", 기록 탭에 스트릭·이번 주(월요일 시작)·전체 통계. 중도 종료는 기록하지 않음.
 - **세션 복원** (`useWorkoutTimer.js` + `App.jsx`): iOS는 백그라운드의 PWA를 수시로 종료 → 진행 중 세션을 `circuit-session-v1`에 매초 저장(phase/roundIdx/exIdx/secondsLeft/circuit/savedAt). 앱 재실행 시 1시간 이내 세션이면 타이머 화면을 **일시정지 상태로 복원**해 "계속하기"로 재개. idle/done 진입 시 삭제. 화면 이탈(visibilitychange hidden) 시 자동 일시정지.
 - **스플래시**: iOS만 기기 해상도별 PNG 필요(`public/splash/`, index.html의 apple-touch-startup-image 17종 — iPhone 12종+iPad 5종). Android·폴드·플립은 manifest(background_color+아이콘+이름)로 자동 생성. 원화는 케틀벨 스윙 그림자(codex imagegen, 솔리드 실루엣) — 재생성 시 스크래치 스크립트로 합성.

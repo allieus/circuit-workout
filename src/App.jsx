@@ -34,6 +34,7 @@ export default function App() {
   const { view } = useRoute(); // URL이 화면 상태의 진실 소스
   const setView = (v) => navigate(PATHS[v] ?? "/");
   const [exercises, setExercises] = useState(DEFAULT_EXERCISES);
+  const [removedIds, setRemovedIds] = useState([]); // 사용자가 서고에서 지운 기본 동작 id — 병합 시 부활 방지
   const [settings, setSettings] = useState(DEFAULT_SETTINGS);
   const [circuit, setCircuit] = useState([]);
   const [loaded, setLoaded] = useState(false);
@@ -48,7 +49,15 @@ export default function App() {
         const result = await storage.get(STORAGE_KEY);
         if (result && result.value) {
           const data = JSON.parse(result.value);
-          if (data.exercises && data.exercises.length) setExercises(data.exercises);
+          if (data.exercises && data.exercises.length) {
+            // 앱 업데이트로 늘어난 기본 동작을 저장된 서고에 합류시킨다.
+            // 사용자가 지운 기본 동작(removed 기록)은 되살리지 않는다.
+            const removed = data.removed || [];
+            const have = new Set(data.exercises.map((e) => e.id));
+            const added = DEFAULT_EXERCISES.filter((e) => !have.has(e.id) && !removed.includes(e.id));
+            setExercises([...data.exercises, ...added]);
+            setRemovedIds(removed);
+          }
           if (data.settings) setSettings({ ...DEFAULT_SETTINGS, ...data.settings });
         }
       } catch (e) {
@@ -77,9 +86,9 @@ export default function App() {
     })();
   }, []);
 
-  const persist = async (exs, sets) => {
+  const persist = async (exs, sets, removed = removedIds) => {
     try {
-      await storage.set(STORAGE_KEY, JSON.stringify({ exercises: exs, settings: sets }));
+      await storage.set(STORAGE_KEY, JSON.stringify({ exercises: exs, settings: sets, removed }));
     } catch (e) {
       console.error("저장 실패", e);
     }
@@ -144,8 +153,11 @@ export default function App() {
 
   const removeExercise = (id) => {
     const next = exercises.filter((e) => e.id !== id);
+    const isDefault = DEFAULT_EXERCISES.some((e) => e.id === id);
+    const removed = isDefault && !removedIds.includes(id) ? [...removedIds, id] : removedIds;
     setExercises(next);
-    persist(next, settings);
+    setRemovedIds(removed);
+    persist(next, settings, removed);
     setCircuit((c) => c.filter((e) => e.id !== id));
   };
 
