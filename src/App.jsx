@@ -12,6 +12,7 @@ import { storage } from "./storage";
 import { useWorkoutTimer, SESSION_KEY, SESSION_MAX_AGE } from "./hooks/useWorkoutTimer";
 import { useWakeLock } from "./hooks/useWakeLock";
 import { HISTORY_KEY, HISTORY_LIMIT, calcStreak } from "./history";
+import { useRoute, navigate } from "./router";
 import HomeView from "./views/HomeView";
 import LibraryView from "./views/LibraryView";
 import TimerView from "./views/TimerView";
@@ -20,8 +21,18 @@ import ContactView from "./views/ContactView";
 
 const STORAGE_KEY = "circuit-app-v1";
 
+// 화면 이름 → 경로. Header 탭 등 setView 호출을 navigate로 이어 준다.
+const PATHS = {
+  home: "/",
+  library: "/library",
+  history: "/history",
+  contact: "/contact",
+  timer: "/timer",
+};
+
 export default function App() {
-  const [view, setView] = useState("home"); // home | library | timer
+  const { view } = useRoute(); // URL이 화면 상태의 진실 소스
+  const setView = (v) => navigate(PATHS[v] ?? "/");
   const [exercises, setExercises] = useState(DEFAULT_EXERCISES);
   const [settings, setSettings] = useState(DEFAULT_SETTINGS);
   const [circuit, setCircuit] = useState([]);
@@ -173,10 +184,19 @@ export default function App() {
   useEffect(() => {
     if (!loaded || !resumeSession) return;
     timer.restore(resumeSession);
-    setView("timer");
+    navigate("/timer", { replace: true }); // 복원은 히스토리에 새 항목을 남기지 않는다
     setResumeSession(null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loaded, resumeSession]);
+
+  // /timer 직접 진입인데 진행/복원 세션이 없으면 홈으로 폴백(세션 복원 로직은 위 effect가 담당)
+  useEffect(() => {
+    if (!loaded || resumeSession) return; // 복원 대기 중이면 건드리지 않는다
+    if (view === "timer" && timer.phase === "idle") {
+      navigate("/", { replace: true });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loaded, view, resumeSession, timer.phase]);
 
   // 첫 진입 시 서킷을 미리 한 번 뽑아둔다 — 빈 화면 대신 기능이 바로 보이게
   useEffect(() => {
@@ -204,7 +224,9 @@ export default function App() {
     );
   }
 
-  if (view === "timer") {
+  // 진행/복원 세션이 있을 때만 타이머를 그린다. 세션 없는 /timer 직접 진입은
+  // 위 폴백 effect가 홈으로 URL을 교체하므로, 여기서는 홈을 잠깐 렌더하고 넘긴다.
+  if (view === "timer" && timer.phase !== "idle") {
     return (
       <TimerView
         circuit={circuit}

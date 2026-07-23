@@ -56,6 +56,18 @@ docs/
   케틀벨-7가지.md          # 기본 동작의 근거 자료 + 프리셋 아이디어
 ```
 
+## URL 라우팅
+
+`src/router.js`(의존성 없는 history API — `parseLocation`·`navigate`·`useRoute`)가 화면 상태의 진실 소스. `vercel.json`이 SPA 딥링크를 `index.html`로 리라이트한다.
+
+| 경로 | 화면 |
+|---|---|
+| `/` | 서킷(홈) |
+| `/library` | 서고 |
+| `/history` | 기록 |
+| `/contact` | 문의 |
+| `/timer` | 타이머 — 진행 중/복원 세션이 있을 때만. 없으면 홈으로 폴백(세션 복원 로직 훼손 금지) |
+
 ## 핵심 로직
 
 - **타이머 상태 머신** (`hooks/useWorkoutTimer.js`): `phase ∈ idle | ready | work | rest | roundRest | done`
