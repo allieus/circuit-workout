@@ -187,6 +187,33 @@ button {
   color: var(--bg);
 }
 
+/* ─── 홈: 보유 장비 토글 ─── */
+.gear-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.gear-label {
+  color: var(--muted);
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.gear-chip {
+  flex: 1;
+  padding: 8px 0;
+  font-size: 13px;
+  background: var(--surface);
+  color: var(--text-dim);
+}
+
+.gear-chip--on {
+  background: var(--text);
+  color: var(--bg);
+}
+
 /* ─── 홈: 설정 스테퍼 ─── */
 .settings-row {
   display: flex;

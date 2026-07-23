@@ -1,4 +1,4 @@
-import { MODES, patternOf, ytUrl } from "../data/defaults";
+import { GEAR, MODES, patternOf, ytUrl } from "../data/defaults";
 import Header from "../components/Header";
 import InstallHint from "../components/InstallHint";
 import SeriesLinks from "../components/SeriesLinks";
@@ -10,6 +10,7 @@ export default function HomeView({
   settings,
   updateSetting,
   changeMode,
+  toggleGear,
   circuit,
   generate,
   rerollAt,
@@ -41,6 +42,21 @@ export default function HomeView({
             onClick={() => changeMode(m.id)}
           >
             {m.label}
+          </button>
+        ))}
+      </div>
+
+      {/* 보유 장비 — 켜진 장비의 동작만 뽑기 풀에 합류 */}
+      <div className="gear-row">
+        <span className="gear-label">보유 장비</span>
+        {GEAR.map((g) => (
+          <button
+            key={g.id}
+            className={`btn gear-chip ${settings.gear?.[g.id] ? "gear-chip--on" : ""}`}
+            onClick={() => toggleGear(g.id)}
+          >
+            {settings.gear?.[g.id] ? "✓ " : ""}
+            {g.label}
           </button>
         ))}
       </div>

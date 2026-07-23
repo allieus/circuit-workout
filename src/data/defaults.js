@@ -15,8 +15,18 @@ export const patternOf = (ex) => PATTERNS.find((p) => p.id === ex.pattern) || PA
 export const MODES = [
   { id: "all", label: "전체" },
   { id: "kb", label: "케틀벨" },
+  { id: "db", label: "덤벨" },
   { id: "body", label: "맨몸" },
   { id: "kids", label: "어린이" },
+];
+
+// ─── 보유 장비 옵션 (디폴트 off) ───
+// gear 태그가 달린 동작은 해당 장비 토글이 켜져 있어야만 뽑기 풀에 합류한다.
+// 모드 필터와 별개 축 — 예: 풀업은 맨몸(body) 동작이지만 철봉이 있어야 나온다.
+export const GEAR = [
+  { id: "pullup", label: "철봉" },
+  { id: "dipbar", label: "딥바" },
+  { id: "rope", label: "줄넘기" },
 ];
 
 // 사전 생성 삽화 — 기본 동작만 존재(사용자 추가 동작 id는 "u"로 시작)
@@ -97,6 +107,23 @@ export const DEFAULT_EXERCISES = [
   { id: "d17", equip: "body", pattern: "full", name: "점핑잭", memo: "가볍게 리듬 타기" },
   { id: "d31", equip: "kb", pattern: "full", name: "케틀벨 스러스터", memo: "스쿼트로 앉았다 일어나며 머리 위로 밀기" },
   { id: "d32", equip: "body", pattern: "full", name: "스케이터 점프", memo: "스케이트 타듯 좌우로 크게 점프" },
+  // 덤벨 (2개 보유 기준 — 케틀벨 동작과 겹치지 않는 투덤벨 위주)
+  { id: "d33", equip: "db", pattern: "lower", name: "덤벨 루마니안 데드리프트", memo: "양손에 덤벨, 엉덩이를 뒤로 빼며 허리는 곧게" },
+  { id: "d34", equip: "db", pattern: "lower", name: "덤벨 스플릿 스쿼트", memo: "한 발을 앞뒤로 벌리고 제자리에서 앉았다 일어나기" },
+  { id: "d35", equip: "db", pattern: "push", name: "덤벨 숄더 프레스", memo: "양손 덤벨을 어깨에서 머리 위로 밀어 올리기" },
+  { id: "d36", equip: "db", pattern: "push", name: "덤벨 플로어 프레스", memo: "누워서 양손 덤벨을 가슴 위로 밀어 올리기" },
+  { id: "d37", equip: "db", pattern: "pull", name: "덤벨 벤트오버 로우", memo: "상체를 숙이고 양손 덤벨을 배꼽 쪽으로 당기기" },
+  { id: "d38", equip: "db", pattern: "pull", name: "덤벨 리버스 플라이", memo: "상체를 숙이고 양팔을 새 날개처럼 옆으로 들기" },
+  { id: "d39", equip: "db", pattern: "core", name: "덤벨 우드촙", memo: "덤벨을 어깨 위에서 반대쪽 무릎으로 대각선으로 휘두르기" },
+  { id: "d40", equip: "db", pattern: "core", name: "덤벨 파머스 마치", memo: "양손 덤벨을 들고 무릎을 높이 제자리 행진" },
+  { id: "d41", equip: "db", pattern: "full", name: "덤벨 클린 앤 프레스", memo: "덤벨을 어깨로 들었다가 머리 위로 밀어 올리기" },
+  { id: "d42", equip: "db", pattern: "full", name: "레니게이드 로우", memo: "푸시업 자세에서 덤벨을 한쪽씩 당기기" },
+  // 보유 장비 동작 (gear 토글이 켜져 있어야 등장)
+  { id: "d43", equip: "body", gear: "pullup", pattern: "pull", name: "풀업", memo: "턱이 봉 위로 올라올 때까지 당기기" },
+  { id: "d44", equip: "body", gear: "pullup", pattern: "core", name: "행잉 니 레이즈", memo: "철봉에 매달려 무릎을 가슴까지 들어 올리기" },
+  { id: "d45", equip: "body", gear: "dipbar", pattern: "push", name: "딥스", memo: "딥바를 짚고 몸을 내렸다가 밀어 올리기" },
+  { id: "d46", equip: "body", gear: "dipbar", pattern: "core", name: "딥바 니 레이즈", memo: "딥바에서 팔을 편 채 버티며 무릎을 가슴까지" },
+  { id: "d47", equip: "body", gear: "rope", pattern: "full", name: "줄넘기", memo: "손목으로 돌리며 가볍게 뛰기" },
 ];
 
 // ─── 어린이 모드 전용 풀 ───
@@ -132,5 +159,6 @@ export const DEFAULT_SETTINGS = {
   prep: 10, // 시작 전 준비(초)
   roundRest: 60, // 라운드 간 휴식(초)
   voice: true, // 음성 가이드 on/off
-  mode: "all", // 운동 모드 (all | kb | body)
+  mode: "all", // 운동 모드 (all | kb | db | body | kids)
+  gear: { pullup: false, dipbar: false, rope: false }, // 보유 장비 (GEAR 참조)
 };

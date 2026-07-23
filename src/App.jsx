@@ -58,7 +58,12 @@ export default function App() {
             setExercises([...data.exercises, ...added]);
             setRemovedIds(removed);
           }
-          if (data.settings) setSettings({ ...DEFAULT_SETTINGS, ...data.settings });
+          if (data.settings)
+            setSettings({
+              ...DEFAULT_SETTINGS,
+              ...data.settings,
+              gear: { ...DEFAULT_SETTINGS.gear, ...(data.settings.gear || {}) },
+            });
         }
       } catch (e) {
         // 저장 데이터 없음 — 기본값 사용
@@ -97,12 +102,14 @@ export default function App() {
   // ─── 서킷 생성 ───
   // 어린이 모드는 전용 풀(KIDS_EXERCISES)에서 뽑는다 — 어른 서고와 완전 분리.
   // 그 외 모드 필터에 맞는 동작이 패턴에 하나도 없으면 모드를 무시하고 패턴 전체에서 뽑는다.
-  const pickRandom = (patternId, excludeId, mode = settings.mode || "all") => {
+  // gear 태그 동작은 해당 장비 토글이 켜져 있어야 후보 — 폴백에서도 유지(없는 장비 동작은 절대 안 나옴).
+  const pickRandom = (patternId, excludeId, mode = settings.mode || "all", gear = settings.gear || {}) => {
     const source = mode === "kids" ? KIDS_EXERCISES : exercises;
     const inMode = (e) => mode === "all" || mode === "kids" || e.equip === mode;
-    let pool = source.filter((e) => e.pattern === patternId && inMode(e) && e.id !== excludeId);
-    if (!pool.length) pool = source.filter((e) => e.pattern === patternId && inMode(e));
-    if (!pool.length) pool = source.filter((e) => e.pattern === patternId);
+    const hasGear = (e) => !e.gear || gear[e.gear];
+    let pool = source.filter((e) => e.pattern === patternId && inMode(e) && hasGear(e) && e.id !== excludeId);
+    if (!pool.length) pool = source.filter((e) => e.pattern === patternId && inMode(e) && hasGear(e));
+    if (!pool.length) pool = source.filter((e) => e.pattern === patternId && hasGear(e));
     return pool.length ? pool[Math.floor(Math.random() * pool.length)] : null;
   };
 
@@ -119,6 +126,17 @@ export default function App() {
     persist(exercises, next);
     if (circuit.length && !activePreset) {
       setCircuit(PATTERNS.map((p) => pickRandom(p.id, undefined, mode)).filter(Boolean));
+    }
+  };
+
+  // 보유 장비 토글 — 꺼진 장비의 동작이 서킷에 남지 않도록 뽑아둔 서킷은 다시 뽑는다.
+  const toggleGear = (gearId) => {
+    const gear = { ...(settings.gear || {}), [gearId]: !(settings.gear || {})[gearId] };
+    const next = { ...settings, gear };
+    setSettings(next);
+    persist(exercises, next);
+    if (circuit.length && !activePreset) {
+      setCircuit(PATTERNS.map((p) => pickRandom(p.id, undefined, next.mode, gear)).filter(Boolean));
     }
   };
 
@@ -278,6 +296,7 @@ export default function App() {
       settings={settings}
       updateSetting={updateSetting}
       changeMode={changeMode}
+      toggleGear={toggleGear}
       circuit={circuit}
       generate={generate}
       rerollAt={rerollAt}

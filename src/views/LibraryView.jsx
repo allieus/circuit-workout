@@ -1,11 +1,13 @@
 import { useState } from "react";
 
-import { MODES, PATTERNS, ytUrl } from "../data/defaults";
+import { GEAR, MODES, PATTERNS, ytUrl } from "../data/defaults";
 import ExerciseArt from "../components/ExerciseArt";
 import Header from "../components/Header";
 
-const EQUIPS = MODES.filter((m) => m.id !== "all");
+// 서고의 기구 선택지 — "전체"는 필터 없음, "어린이"는 전용 풀이라 제외
+const EQUIPS = MODES.filter((m) => m.id !== "all" && m.id !== "kids");
 const equipLabel = (id) => EQUIPS.find((m) => m.id === id)?.label;
+const gearLabel = (id) => GEAR.find((g) => g.id === id)?.label;
 
 export default function LibraryView({ view, setView, exercises, addExercise, removeExercise }) {
   const [newName, setNewName] = useState("");
@@ -82,6 +84,7 @@ export default function LibraryView({ view, setView, exercises, addExercise, rem
                   <div className="exercise-name">
                     {e.name}
                     {equipLabel(e.equip) && <span className="equip-tag">{equipLabel(e.equip)}</span>}
+                    {gearLabel(e.gear) && <span className="equip-tag">{gearLabel(e.gear)}</span>}
                   </div>
                   {e.memo && <div className="exercise-memo">{e.memo}</div>}
                 </div>
