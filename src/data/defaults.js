@@ -10,23 +10,37 @@ export const PATTERNS = [
 
 export const patternOf = (ex) => PATTERNS.find((p) => p.id === ex.pattern) || PATTERNS[0];
 
-// ─── 운동 모드: 기구 기준 필터 ───
-// equip이 없는 동작(구버전 사용자 추가분)은 "전체" 모드에서만 뽑힌다.
-export const MODES = [
-  { id: "all", label: "전체" },
-  { id: "kb", label: "케틀벨" },
-  { id: "db", label: "덤벨" },
-  { id: "body", label: "맨몸" },
-  { id: "kids", label: "어린이" },
+// ─── 대상: 어른용 | 어린이용 ───
+// 풀이 완전히 분리된다 — 어른 서고(exercises)와 KIDS_EXERCISES.
+export const AUDIENCES = [
+  { id: "adult", label: "어른용" },
+  { id: "kids", label: "어린이용" },
 ];
 
-// ─── 보유 장비 옵션 (디폴트 off) ───
-// gear 태그가 달린 동작은 해당 장비 토글이 켜져 있어야만 뽑기 풀에 합류한다.
-// 모드 필터와 별개 축 — 예: 풀업은 맨몸(body) 동작이지만 철봉이 있어야 나온다.
+// ─── 오늘 쓸 장비 (어른용) ───
+// 맨몸 동작은 항상 후보, 장비 동작은 그 장비 칩이 켜져 있을 때만 후보.
+// 케틀벨·덤벨은 주력 도구라 디폴트 on — 다 켜면 예전 "전체", 다 끄면 "맨몸" 모드와 같다.
 export const GEAR = [
+  { id: "kb", label: "케틀벨" },
+  { id: "db", label: "덤벨" },
   { id: "pullup", label: "철봉" },
   { id: "dipbar", label: "딥바" },
   { id: "rope", label: "줄넘기" },
+];
+
+// 어린이용 장비 — 아령(2kg) 하나뿐이지만 구조는 어른용과 동일
+export const KIDS_GEAR = [{ id: "kdb", label: "아령" }];
+
+// 동작의 필요 장비 — equip(kb/db)과 gear(철봉 등)를 한 규칙으로 통일.
+// null이면 맨몸(항상 후보). equip이 없는 구버전 사용자 추가 동작도 항상 후보.
+export const requiredGear = (ex) =>
+  ex.equip === "kb" ? "kb" : ex.equip === "db" ? "db" : ex.gear || null;
+
+// 서고 "새 동작 추가" 폼의 기구 선택지
+export const EQUIP_CHOICES = [
+  { id: "kb", label: "케틀벨" },
+  { id: "db", label: "덤벨" },
+  { id: "body", label: "맨몸" },
 ];
 
 // 사전 생성 삽화 — 기본 동작만 존재(사용자 추가 동작 id는 "u"로 시작)
@@ -134,19 +148,24 @@ export const KIDS_EXERCISES = [
   // 하체
   { id: "c1", pattern: "lower", name: "개구리 점프", memo: "쪼그려 앉았다가 개구리처럼 폴짝 뛰기" },
   { id: "c5", pattern: "lower", name: "아기 스쿼트", memo: "팔을 앞으로 뻗고 천천히 앉았다 일어나기" },
+  { id: "c11", pattern: "lower", name: "오리 걸음", memo: "쪼그려 앉아 뒤뚱뒤뚱 오리처럼 걷기" },
+  { id: "c12", pattern: "lower", name: "까치발 서기", memo: "까치발로 서서 천천히 올라갔다 내려오기" },
   // 푸시
   { id: "c3", pattern: "push", name: "무릎 푸시업", memo: "무릎을 바닥에 대고 살짝만 내려갔다 올라오기" },
   { id: "c7", pattern: "push", name: "벽 푸시업", memo: "벽을 짚고 서서 팔을 굽혔다 펴기" },
-  { id: "c4", pattern: "push", name: "아령 만세", memo: "아령을 두 손에 들고 만세하듯 천천히 위로" },
+  { id: "c4", gear: "kdb", pattern: "push", name: "아령 만세", memo: "아령을 두 손에 들고 만세하듯 천천히 위로" },
   // 풀
   { id: "c8", pattern: "pull", name: "수영 슈퍼맨", memo: "엎드려서 수영하듯 팔다리를 첨벙첨벙" },
   DEFAULT_EXERCISES.find((e) => e.id === "d9"), // 슈퍼맨
+  { id: "c13", pattern: "pull", name: "수건 줄다리기", memo: "수건 양 끝을 잡고 힘껏 당기기" },
   // 코어
   { id: "c2", pattern: "core", name: "곰 걸음", memo: "손과 발로 엉금엉금 네 발 걷기" },
   { id: "c9", pattern: "core", name: "게 걸음", memo: "배꼽은 하늘로, 손과 발로 옆으로 걷기" },
+  { id: "c14", pattern: "core", name: "누워서 자전거 타기", memo: "누워서 자전거 페달을 밟듯 다리 돌리기" },
   // 전신
   { id: "c10", pattern: "full", name: "제자리 달리기", memo: "무릎을 높이 들며 신나게 제자리 뛰기" },
   DEFAULT_EXERCISES.find((e) => e.id === "d17"), // 점핑잭
+  { id: "c15", pattern: "full", name: "별 점프", memo: "팔다리를 별처럼 활짝 펴며 점프" },
 ];
 
 // 어린이 모드 진입 시 적용되는 권장 타이머 설정
@@ -159,6 +178,7 @@ export const DEFAULT_SETTINGS = {
   prep: 10, // 시작 전 준비(초)
   roundRest: 60, // 라운드 간 휴식(초)
   voice: true, // 음성 가이드 on/off
-  mode: "all", // 운동 모드 (all | kb | db | body | kids)
-  gear: { pullup: false, dipbar: false, rope: false }, // 보유 장비 (GEAR 참조)
+  audience: "adult", // 대상 (adult | kids)
+  // 오늘 쓸 장비 — 주력 도구(케틀벨·덤벨·아령)는 on, 보조 장비는 off가 기본
+  gear: { kb: true, db: true, pullup: false, dipbar: false, rope: false, kdb: true },
 };

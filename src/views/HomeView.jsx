@@ -1,4 +1,4 @@
-import { GEAR, MODES, patternOf, ytUrl } from "../data/defaults";
+import { AUDIENCES, GEAR, KIDS_GEAR, patternOf, ytUrl } from "../data/defaults";
 import Header from "../components/Header";
 import InstallHint from "../components/InstallHint";
 import SeriesLinks from "../components/SeriesLinks";
@@ -9,7 +9,7 @@ export default function HomeView({
   setView,
   settings,
   updateSetting,
-  changeMode,
+  changeAudience,
   toggleGear,
   circuit,
   generate,
@@ -33,23 +33,23 @@ export default function HomeView({
       <Header view={view} setView={setView} />
       <InstallHint />
 
-      {/* 운동 모드 */}
+      {/* 대상: 어른용 | 어린이용 */}
       <div className="mode-row">
-        {MODES.map((m) => (
+        {AUDIENCES.map((a) => (
           <button
-            key={m.id}
-            className={`btn mode-btn ${(settings.mode || "all") === m.id ? "mode-btn--active" : ""}`}
-            onClick={() => changeMode(m.id)}
+            key={a.id}
+            className={`btn mode-btn ${(settings.audience || "adult") === a.id ? "mode-btn--active" : ""}`}
+            onClick={() => changeAudience(a.id)}
           >
-            {m.label}
+            {a.label}
           </button>
         ))}
       </div>
 
-      {/* 보유 장비 — 켜진 장비의 동작만 뽑기 풀에 합류 */}
+      {/* 오늘 쓸 장비 — 켜진 장비의 동작만 뽑기 풀에 합류 (맨몸 동작은 항상) */}
       <div className="gear-row">
-        <span className="gear-label">보유 장비</span>
-        {GEAR.map((g) => (
+        <span className="gear-label">장비</span>
+        {(settings.audience === "kids" ? KIDS_GEAR : GEAR).map((g) => (
           <button
             key={g.id}
             className={`btn gear-chip ${settings.gear?.[g.id] ? "gear-chip--on" : ""}`}
