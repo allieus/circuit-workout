@@ -920,6 +920,101 @@ button {
   }
 }
 
+/* ─── 폰 가로모드(landscape·세로 짧음): 좌(라벨·카운트·바) / 우(동작 정보) 2단 ───
+   844×390 같은 폰 가로에서 세로 스택이 넘쳐 동작 정보가 잘리던 문제 해결.
+   min-width:900(데스크톱 와이드)에는 미달, 기존 max-height:640 규칙이 이미
+   .timer-lineup 을 숨겨 두므로 그 위에 얹어 카운트·동작을 가로로 나눈다. */
+@media (orientation: landscape) and (max-height: 500px) and (max-width: 899px) {
+  .app--timer {
+    max-width: min(760px, 94vw);
+    padding-top: calc(12px + env(safe-area-inset-top));
+    padding-bottom: calc(12px + env(safe-area-inset-bottom));
+  }
+
+  .timer-steps {
+    margin-top: 10px;
+  }
+
+  /* ready/work/rest: DOM 순서(label→count→[hint]→exrow→progress)를 유지한 채
+     grid-template-areas 로 좌우 2단 재배치 — 진행바는 하단 전체 폭 스팬 */
+  .timer-center--split .timer-main {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-areas:
+      "label hint"
+      "count exrow"
+      "progress progress";
+    align-items: center;
+    column-gap: 26px;
+    row-gap: 6px;
+  }
+
+  .timer-center--split .timer-label--phase {
+    grid-area: label;
+    margin: 0;
+    justify-self: start;
+  }
+
+  .timer-center--split .timer-count {
+    grid-area: count;
+    font-size: 84px;
+    justify-self: start;
+    text-shadow: none;
+  }
+
+  .timer-center--split .timer-hint {
+    grid-area: hint;
+    margin: 0;
+    justify-self: start;
+  }
+
+  .timer-center--split .timer-exrow {
+    grid-area: exrow;
+    margin: 0;
+    justify-content: flex-start;
+  }
+
+  .timer-center--split .progress {
+    grid-area: progress;
+    margin-top: 10px;
+  }
+
+  /* done/roundRest(split 아님): 폰트·마진 축소로 세로 넘침 방지 */
+  .timer-center .timer-count--medium {
+    font-size: 60px;
+  }
+
+  .timer-done-title {
+    font-size: 38px;
+  }
+
+  .timer-done-sub {
+    margin-top: 8px;
+  }
+
+  .timer-streak {
+    margin-top: 10px;
+    font-size: 17px;
+  }
+
+  .timer-next-title {
+    margin-top: 10px;
+  }
+
+  .timer-lineup-row {
+    margin-bottom: 3px;
+  }
+
+  /* 하단 컨트롤도 세로 절약 */
+  .timer-btn {
+    padding: 12px 0;
+  }
+
+  .timer-btn--primary {
+    padding: 12px 0;
+  }
+}
+
 .timer-controls {
   display: flex;
   gap: 10px;
