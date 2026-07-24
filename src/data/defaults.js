@@ -150,22 +150,32 @@ export const KIDS_EXERCISES = [
   { id: "c5", pattern: "lower", name: "아기 스쿼트", memo: "팔을 앞으로 뻗고 천천히 앉았다 일어나기" },
   { id: "c11", pattern: "lower", name: "오리 걸음", memo: "쪼그려 앉아 뒤뚱뒤뚱 오리처럼 걷기" },
   { id: "c12", pattern: "lower", name: "까치발 서기", memo: "까치발로 서서 천천히 올라갔다 내려오기" },
+  { id: "c16", pattern: "lower", name: "캥거루 점프", memo: "무릎을 굽혔다가 캥거루처럼 제자리에서 높이 폴짝 뛰기" },
+  { id: "c17", pattern: "lower", name: "플라밍고 서기", memo: "한 발을 들고 플라밍고처럼 균형 잡기, 팔은 날개처럼" },
+  { id: "c18", pattern: "lower", name: "고릴라 걷기", memo: "쪼그려 앉은 자세로 고릴라처럼 걸으며 가슴 두드리기" },
   // 푸시
   { id: "c3", pattern: "push", name: "무릎 푸시업", memo: "무릎을 바닥에 대고 살짝만 내려갔다 올라오기" },
   { id: "c7", pattern: "push", name: "벽 푸시업", memo: "벽을 짚고 서서 팔을 굽혔다 펴기" },
   { id: "c4", gear: "kdb", pattern: "push", name: "아령 만세", memo: "아령을 두 손에 들고 만세하듯 천천히 위로" },
+  { id: "c19", pattern: "push", name: "물개 밀기", memo: "엎드려서 손바닥으로 바닥을 밀며 물개처럼 가슴 들어올리기" },
+  { id: "c20", pattern: "push", name: "자벌레 걷기", memo: "선 채로 손을 짚고 자벌레처럼 앞으로 걸어갔다 돌아오기" },
   // 풀
   { id: "c8", pattern: "pull", name: "수영 슈퍼맨", memo: "엎드려서 수영하듯 팔다리를 첨벙첨벙" },
   DEFAULT_EXERCISES.find((e) => e.id === "d9"), // 슈퍼맨
   { id: "c13", pattern: "pull", name: "수건 줄다리기", memo: "수건 양 끝을 잡고 힘껏 당기기" },
+  { id: "c21", pattern: "pull", name: "악어 배밀이", memo: "낮게 엎드려 팔꿈치로 바닥을 당기며 악어처럼 기어가기" },
   // 코어
   { id: "c2", pattern: "core", name: "곰 걸음", memo: "손과 발로 엉금엉금 네 발 걷기" },
   { id: "c9", pattern: "core", name: "게 걸음", memo: "배꼽은 하늘로, 손과 발로 옆으로 걷기" },
   { id: "c14", pattern: "core", name: "누워서 자전거 타기", memo: "누워서 자전거 페달을 밟듯 다리 돌리기" },
+  { id: "c22", pattern: "core", name: "강아지 발차기", memo: "네 발 자세에서 강아지처럼 한 다리씩 뒤로 뻥뻥 차기" },
+  { id: "c23", pattern: "core", name: "거북이 기어가기", memo: "몸을 웅크리고 거북이처럼 아주 천천히 기어가기" },
   // 전신
   { id: "c10", pattern: "full", name: "제자리 달리기", memo: "무릎을 높이 들며 신나게 제자리 뛰기" },
   DEFAULT_EXERCISES.find((e) => e.id === "d17"), // 점핑잭
   { id: "c15", pattern: "full", name: "별 점프", memo: "팔다리를 별처럼 활짝 펴며 점프" },
+  { id: "c24", pattern: "full", name: "펭귄 걸음", memo: "팔을 옆구리에 붙이고 펭귄처럼 뒤뚱뒤뚱 걷기" },
+  { id: "c25", pattern: "full", name: "코끼리 걷기", memo: "두 팔을 코끼리 코처럼 모아 흔들며 쿵쿵 걷기" },
 ];
 
 // 어린이 모드 진입 시 적용되는 권장 타이머 설정

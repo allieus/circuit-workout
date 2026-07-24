@@ -30,7 +30,7 @@ src/
   styles.css               # 전체 스타일 — 디자인 토큰(CSS 변수) + 클래스. 동적 색만 인라인
   audio.js                 # beep(Web Audio) + 음성 클립 플레이어(speakGuide) + Web Speech 폴백
   storage.js               # 스토리지 어댑터 — localStorage 구현, 아티팩트의 window.storage 인터페이스 유지
-  data/defaults.js         # PATTERNS(5패턴+색), AUDIENCES(어른/어린이), GEAR·KIDS_GEAR(장비 칩), requiredGear(동작→필요 장비), DEFAULT_EXERCISES(기본 51동작), KIDS_EXERCISES(16동작), DEFAULT_SETTINGS, artUrl/ytUrl
+  data/defaults.js         # PATTERNS(5패턴+색), AUDIENCES(어른/어린이), GEAR·KIDS_GEAR(장비 칩), requiredGear(동작→필요 장비), DEFAULT_EXERCISES(기본 51동작), KIDS_EXERCISES(26동작), DEFAULT_SETTINGS, artUrl/ytUrl
   data/series.js           # 뽑기 시리즈 목록(SELF_ID·SERIES·REPO_URL) — 새 데모 앱 나오면 여기 추가
   hooks/
     useWorkoutTimer.js     # 타이머 상태 머신 전체 (advance 로직의 유일한 위치)
